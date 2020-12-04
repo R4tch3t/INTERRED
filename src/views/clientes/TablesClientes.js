@@ -117,7 +117,7 @@ allClientes=async(cliente)=>{
             if (r.clientes) {
              r.clientes.forEach(e => {
                 data.push({
-                  key: `${e.idCliente}u`,
+                  key: e.idCliente,
                   cliente: e.cliente,
                   telefono: e.telefono,
                   ubi: e.ubi,

@@ -66,7 +66,7 @@ class App extends React.Component {
       CTA: props.CTA,
       nombre: props.nombre,
       ubi: props.ubi,
-      tp: props.tp,
+      fecha: props.fecha,
       añoI: props.añoI,
       añoF: props.añoF,
       totalA: spellNumber(parseInt(props.añoF) - parseInt(props.añoI)).replace('PESOS', '').replace('PESO', '')
@@ -244,7 +244,7 @@ class App extends React.Component {
 
   render() {
     const {classes} = this.props
-    const {dia, CTA, nombre, ubi, tp, mes, año, añoI, añoF, totalA} = this.state
+    const {dia, CTA, nombre, ubi, fecha, mes, año, añoI, añoF, totalA} = this.state
     const nDoc = `CARTA_INVITACION_CTA_${CTA}_${dia}_${mes}_${año}`
 
     return (
@@ -372,10 +372,10 @@ class App extends React.Component {
                         </View>
                         <View style={this.styles.tableRow}> 
                           <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>0</Text> 
+                          <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{CTA}</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>12-11-03</Text> 
+                    <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{fecha}</Text> 
                           </View> 
                         </View>
                       </View>
@@ -397,7 +397,7 @@ class App extends React.Component {
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>NOMBRE DEL CLIENTE:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}></Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{nombre}</Text> 
                           </View> 
                         </View>
                         <View style={this.styles.tableRow}> 
@@ -405,7 +405,7 @@ class App extends React.Component {
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>UBICACIÓN:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}></Text> 
+                    <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{ubi}</Text> 
                           </View> 
                         </View>
                         <View style={this.styles.tableRow}> 

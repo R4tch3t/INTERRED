@@ -86,7 +86,8 @@ export default () => {
   const genCTA = getParameterByName('genCTA', urlDec)
   const nombre = getParameterByName('nombre', urlDec)
   const ubi = getParameterByName('ubi', urlDec)
-  const tp = getParameterByName('tp', urlDec)
+  const fecha = getParameterByName('fecha', urlDec)
+  console.log(fecha)
   const añoI = getParameterByName('añoI', urlDec)
   const añoF = getParameterByName('añoF', urlDec)
   const [state, setState] = React.useState({bigChartData: 'data1'})
@@ -187,8 +188,8 @@ export default () => {
                 <CardBody>
                   <div >
                     {bandCTA==='1' && 
-                      <Pdf classes={classes} CTA={genCTA} nombre={nombre}
-                        ubi={ubi} tp={tp} añoI={añoI} añoF={añoF}  />
+                      <Pdf classes={classes} CTA={genCTA}  nombre={nombre}
+                        ubi={ubi} fecha={fecha}   />
                     }
                     {bandCTA!=='1' && 
                       <TablesClientes
