@@ -175,11 +175,11 @@ function EnhancedTableHead(props) {
           </TableHead>
   );
 }
-const genCTA = (CTA, nombre, ubi, fecha) => {
+const genCTA = (CTA, nombre, ubi, fecha, monto, velocidad) => {
   //const idRol = cookie.load('idRol')
   const idRol = "1";
   let url = idRol === '1' ? `/admin/listaClientes` : `/usuario/listaClientes`
-  let subUrl = `?bandCTA=1&genCTA=${CTA}&nombre=${nombre}&ubi=${ubi}&fecha=${fecha}`
+  let subUrl = `?bandCTA=1&genCTA=${CTA}&nombre=${nombre}&ubi=${ubi}&fecha=${fecha}&monto=${monto}&velocidad=${velocidad}`
   url += `?v=${encrypt(subUrl)}`;
   //window.history.pushState(null,'Administrador','#/admin/creditos')
     //       window.history.go()
@@ -246,27 +246,27 @@ export default function CustomTable(props) {
               <TableRow key={row.key} className={classes.tableBodyRow}>
                 <TableCell className={classes.tableCell} 
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
-                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaPago)}} >
+                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaPago,row.monto,row.velocidad)}} >
                   {row.cliente}
                 </TableCell>
                 <TableCell className={classes.tableCell}
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
-                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaPago)}}>
+                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaPago,row.monto,row.velocidad)}}>
                   {row.telefono}
                 </TableCell>
                 <TableCell className={classes.tableCell}
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
-                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaPago)}}>
+                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaPago,row.monto,row.velocidad)}}>
                   {row.ubi}
                 </TableCell>
                 <TableCell className={classes.tableCell}
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
-                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaPago)}}>
+                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaPago,row.monto,row.velocidad)}}>
                   {row.fechaPago}
                 </TableCell>
                 <TableCell className={classes.tableCell}
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
-                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaPago)}}>
+                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaPago,row.monto,row.velocidad)}}>
                   {row.monto}
                 </TableCell>
                 <TableCell className={classes.tableCell}>

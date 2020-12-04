@@ -57,7 +57,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import stylesM from "assets/jss/material-dashboard-react/components/listItemStyle.js";
 import decrypt from "views/Dashboard/decrypt.js";
-import Pdf from "./renderCarta"
+import Pdf from "./renderRecibo"
 
 const useStyles = makeStyles(styles);
 const useStylesM = makeStyles(stylesM);
@@ -87,9 +87,11 @@ export default () => {
   const nombre = getParameterByName('nombre', urlDec)
   const ubi = getParameterByName('ubi', urlDec)
   const fecha = getParameterByName('fecha', urlDec)
+  const monto = getParameterByName('monto', urlDec)
   console.log(fecha)
   const añoI = getParameterByName('añoI', urlDec)
   const añoF = getParameterByName('añoF', urlDec)
+  const velocidad = getParameterByName('velocidad', urlDec)
   const [state, setState] = React.useState({bigChartData: 'data1'})
   const setBgChartData = name => {
     /*this.setState({
@@ -189,7 +191,7 @@ export default () => {
                   <div >
                     {bandCTA==='1' && 
                       <Pdf classes={classes} CTA={genCTA}  nombre={nombre}
-                        ubi={ubi} fecha={fecha}   />
+                        ubi={ubi} fecha={fecha} monto={monto} velocidad={velocidad}   />
                     }
                     {bandCTA!=='1' && 
                       <TablesClientes

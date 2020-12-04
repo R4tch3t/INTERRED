@@ -34,6 +34,20 @@ import CustomInput from "components/CustomInput/CustomInput";
 import spellNumber from "views/Dashboard/spellNumber";
 //import spellNumber from "./spellNumber";
 //import InformeM from "./InformeM";
+// reactstrap components
+import {
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  Label,
+  FormGroup,
+  Input,
+  Table,
+  Row,
+  Col,
+  UncontrolledTooltip
+} from "reactstrap";
 
 Font.register({
   family: 'Roboto',
@@ -67,8 +81,9 @@ class App extends React.Component {
       nombre: props.nombre,
       ubi: props.ubi,
       fecha: props.fecha,
-      añoI: props.añoI,
+      monto: props.monto,
       añoF: props.añoF,
+      velocidad: props.velocidad,
       totalA: spellNumber(parseInt(props.añoF) - parseInt(props.añoI)).replace('PESOS', '').replace('PESO', '')
     }
     
@@ -244,7 +259,7 @@ class App extends React.Component {
 
   render() {
     const {classes} = this.props
-    const {dia, CTA, nombre, ubi, fecha, mes, año, añoI, añoF, totalA} = this.state
+    const {dia, CTA, nombre, ubi, fecha,monto, mes, año, añoI, añoF, velocidad} = this.state
     const nDoc = `CARTA_INVITACION_CTA_${CTA}_${dia}_${mes}_${año}`
 
     return (
@@ -255,7 +270,24 @@ class App extends React.Component {
               <CardBody>
               <React.Fragment>
                   <GridContainer>
-                    <GridItem xs={12} sm={12} md={5}>
+                  <GridItem xs={12} sm={12} md={3}>
+                  
+                      <CustomInput
+                        labelText="NOMBRE:"
+                        id="nombre"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          type: "text",
+                          defaultValue: nombre,
+                          //onBlur: this.handdleU
+                          onKeyUp: this.handleUpper,
+                          //onMouseUp: this.handdleU
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
                         labelText="UBICACIÓN:"
                         id="ubi"
@@ -272,35 +304,52 @@ class App extends React.Component {
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={3}>
-                      <CustomInput
-                        labelText="AÑO INICIAL:"
-                        id="añoI"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          type: "number",
-                          defaultValue: añoI,
-                          onKeyUp: this.handleUpperN,
-                         // onMouseUp: this.handdleUp
-                        }}
-                      />
+                    <UncontrolledDropdown style={{position: 'relative', left: 0}}>
+                  <DropdownToggle
+                      caret
+                      className="btn-icon"
+                      color="link"
+                      data-toggle="dropdown"
+                      type="button"
+                      style={{width: 90}}
+                    >
+                    VELOCIDAD: 
+                    </DropdownToggle>
+                    <DropdownToggle
+                      caret
+                      className="btn-icon"
+                      color="link"
+                      data-toggle="dropdown"
+                      type="button"
+                    >
+                      <i className="tim-icons icon-settings-gear-63" />
+                    </DropdownToggle>
+                    <DropdownMenu aria-labelledby="dropdownMenuLink" left>
+                      <DropdownItem
+                        href="#pablo"
+                        onClick={e => {this.setState({velocidad: e.target.innerHTML})}}
+                      >
+                        10 MEGAS
+                      </DropdownItem>
+                      <DropdownItem
+                        href="#pablo"
+                        onClick={e => {this.setState({velocidad: e.target.innerHTML})}}
+                      >
+                        20 MEGAS
+                      </DropdownItem>
+                      <DropdownItem
+                        href="#pablo"
+                        onClick={e => {this.setState({velocidad: e.target.innerHTML})}}
+                      >
+                        30 MEGAS
+                      </DropdownItem>
+                    </DropdownMenu>
+                    <div style={{height: 7}} />
+                    {velocidad}
+                  </UncontrolledDropdown>
+                  
                     </GridItem>
-                    <GridItem xs={12} sm={12} md={3}>
-                      <CustomInput
-                        labelText="AÑO FINAL:"
-                        id="añoF"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          type: "number",
-                          defaultValue: añoF,
-                          onKeyUp: this.handleUpperN,
-                         // onMouseUp: this.handdleUp
-                        }}
-                      />
-                    </GridItem>
+                    
                   </GridContainer>
                   <GridContainer>
                     <Button color="primary" 
@@ -386,7 +435,7 @@ class App extends React.Component {
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>CANTIDAD:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ 0</Text> 
+                    <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {monto}</Text> 
                           </View> 
                         </View>
                       </View>  
