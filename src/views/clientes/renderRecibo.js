@@ -35,6 +35,7 @@ import spellNumber from "views/Dashboard/spellNumber";
 //import Calendar from "react-calendar";
 import {Calendar} from "views/calendar"
 import {genRecibo} from "./methods"
+import WN from "@material-ui/icons/Warning"
 //import spellNumber from "./spellNumber";
 //import InformeM from "./InformeM";
 // reactstrap components
@@ -99,7 +100,7 @@ class App extends React.Component {
       ubi: props.ubi,
       monto: props.monto,
       fechaPago: this.dateSI.toISOString(),
-      bandCR: true,
+      expiro: props.expiro,
       idVelocidad: props.idVelocidad,
       velocidad: props.velocidad,
       pagar: props.pagar,
@@ -130,16 +131,17 @@ class App extends React.Component {
   };
   
   handdleUp = (e) => {
+    const {fechaSI,fechaSF} = this.state
     const nombre = document.getElementById('nombre').value;
     const ubi = document.getElementById('ubi').value;
     //const añoF = document.getElementById('añoF').value
     //const totalA = spellNumber(parseInt(añoF) - parseInt(añoI)).replace('PESOS', '').replace('PESO', '')
     const pagar = document.getElementById('pagar').value
     const fechaPago = new Date(new Date(Date.now()) - this.tzoffset).toISOString().slice(0, -1)
-    let fechaSI = this.dateSI
-    let fechaSF = this.dateSF
-    fechaSI = new Date(fechaSI - this.tzoffset)
-    fechaSF = new Date(fechaSF - this.tzoffset)
+    let dateSI = new Date(fechaSI);
+    let dateSF = new Date(fechaSF);
+    dateSI = new Date(dateSI - this.tzoffset)
+    dateSF = new Date(dateSF - this.tzoffset)
     
     genRecibo(this,nombre,ubi,pagar,fechaPago,fechaSI,fechaSF)
   }
@@ -304,27 +306,35 @@ onChangeDF = date => {
 }
 setTotal=(t,idV,v)=>{
     const {difDate} = this.state
-    const pagar = t * difDate
+    const monto = t * difDate
       
     console.log(difDate)
-    console.log(pagar)
+    console.log(monto)
     //c.setState({pagar})
-    this.setState({idVelocidad: idV,velocidad: v,pagar})
+    //console.log(difDate)
+    this.setState({idVelocidad: idV,velocidad: v,monto})
 } 
   render() {
     const {classes} = this.props
-    const {dia, idCliente, nombre, ubi, fechaPago, monto, mes, año,pagar, fechaSI, fechaSF, bandCR, añoF, idVelocidad, velocidad,difDate} = this.state
+    const {dia, idCliente, nombre, ubi, fechaPago, monto, mes, año,pagar, fechaSI, fechaSF, añoF, idVelocidad, velocidad,difDate, expiro} = this.state
     const nDoc = `RECIBO_CLIENTE_${idCliente}`
     //const dateSI = "";
-    //const dateSF = "";
+    //const dateSF = ""
     return (
       <CardIcon>
+        {expiro && <>
+            <div style={{position: 'absolute', opacity:1, top:80, paddingTop:15, backgroundColor: 'red', zIndex:9999, alignContent:'center', height: 50, borderRadius: 20, boxShadow: "4px 4px 4px 2px rgba(1, 1, 1, 0.2)",  borderWidth: 0.5, borderColor: 'black', elevation: 2}}>
+                    <WN color="inherit"  
+                    /> <i style={{color:'white'}} >¡ADVERTENCÍA! Él número de cliente presenta un adeudo, favor de hacer el pago.</i>
+            </div>
+                  </>}
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardBody>
               <React.Fragment>
                   <GridContainer>
+                    
                   <GridItem xs={12} sm={12} md={3}>
                   
                       <CustomInput
@@ -418,7 +428,7 @@ setTotal=(t,idV,v)=>{
                       </DropdownItem>
                     </DropdownMenu>
                     <div style={{height: 7}} />
-                    {velocidad}
+                    {velocidad!=="undefined"?velocidad:"10 MEGAS"}
                   </UncontrolledDropdown>
                   
                     </GridItem>
@@ -432,7 +442,7 @@ setTotal=(t,idV,v)=>{
                         inputProps={{
                           type: "number",
                           //defaultValue: parseInt(pagar)===0?monto:pagar,
-                          value: monto
+                          value: monto!=="undefined"?monto:150
                           //onBlur: this.handdleU
                           //onKeyUp: this.handleUpper,
                           //onMouseUp: this.handdleU
@@ -458,6 +468,7 @@ setTotal=(t,idV,v)=>{
                         alignItems: "center"
                       }} 
                       onClick={this.handdleUp}
+                      disabled={(!expiro||expiro==="undefined")&&monto!=="undefined"}
                       >
                         PAGAR
                       </Button>
@@ -470,7 +481,7 @@ setTotal=(t,idV,v)=>{
                         alignItems: "center"
                       }} 
                       onClick={this.handdleUp}
-                      disabled={bandCR}
+                      disabled={(expiro&&expiro!=="undefined")||monto==="undefined"}
                       >
                         CANCELAR PAGO
                       </Button>

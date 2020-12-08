@@ -139,6 +139,7 @@ allClientes=async(cliente)=>{
                   dateSI:  e.ultimoRecibo?e.ultimoRecibo.dateI:e.ultimoRecibo,
                   dateSF:  e.ultimoRecibo?e.ultimoRecibo.dateF:e.ultimoRecibo,
                   difDate:  e.ultimoRecibo?e.ultimoRecibo.difDate:e.ultimoRecibo,
+                  
                 });
                 console.log(data) 
                 if(e.expiro){

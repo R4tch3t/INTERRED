@@ -55,7 +55,7 @@ export default function DateRangePickerExample(props) {
             {...startDateInputProps}
             placeholder='Fecha inicial'
             style={{marginRight: 20}}
-            value={c.state.fechaSI}
+            value={c.state.fechaSI!=="undefined"?c.state.fechaSI:""}
           />
            {">"}
           <input
@@ -63,7 +63,7 @@ export default function DateRangePickerExample(props) {
             {...endDateInputProps}
             placeholder='Fecha final'
             style={{marginLeft: 20}}
-            value={c.state.fechaSF}
+            value={c.state.fechaSF!=="undefined"?c.state.fechaSF:""}
           />
         </div>
       )}
