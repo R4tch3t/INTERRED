@@ -83,7 +83,7 @@ export default () => {
   let urlDec = getParameterByName('v');
   urlDec = decrypt(urlDec);
   const bandCTA = getParameterByName('bandCTA', urlDec)
-  const genCTA = getParameterByName('genCTA', urlDec)
+  const idCliente = getParameterByName('idCliente', urlDec)
   const nombre = getParameterByName('nombre', urlDec)
   const ubi = getParameterByName('ubi', urlDec)
   const fecha = getParameterByName('fecha', urlDec)
@@ -91,7 +91,12 @@ export default () => {
   console.log(fecha)
   const añoI = getParameterByName('añoI', urlDec)
   const añoF = getParameterByName('añoF', urlDec)
+  const pagar = getParameterByName('pagar', urlDec)
   const velocidad = getParameterByName('velocidad', urlDec)
+  const idVelocidad = getParameterByName('idVelocidad', urlDec)
+  const dateSI = getParameterByName('dateSI', urlDec)
+  const dateSF = getParameterByName('dateSF', urlDec)
+  const difDate = getParameterByName("difDate",urlDec)
   const [state, setState] = React.useState({bigChartData: 'data1'})
   const setBgChartData = name => {
     /*this.setState({
@@ -190,8 +195,9 @@ export default () => {
                 <CardBody>
                   <div >
                     {bandCTA==='1' && 
-                      <Pdf classes={classes} CTA={genCTA}  nombre={nombre}
-                        ubi={ubi} fecha={fecha} monto={monto} velocidad={velocidad}   />
+                      <Pdf classes={classes} idCliente={idCliente}  nombre={nombre}
+                        ubi={ubi} fecha={fecha} monto={monto} idVelocidad={idVelocidad} dateSI={dateSI} dateSF={dateSF} velocidad={velocidad}
+                        pagar={pagar} difDate={difDate}   />
                     }
                     {bandCTA!=='1' && 
                       <TablesClientes

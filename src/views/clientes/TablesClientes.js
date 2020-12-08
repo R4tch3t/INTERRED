@@ -26,6 +26,8 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Search from "@material-ui/icons/Search";
 import Poppers from "@material-ui/core/Popper";
 import ip from 'variables/ip';
+import GenExpHTML from "./GenExpHTML"
+import WN from "@material-ui/icons/Warning"
 import { Line, Bar } from "react-chartjs-2";
 
 // reactstrap components
@@ -48,22 +50,10 @@ import {
   Col,
   UncontrolledTooltip
 } from "reactstrap";
+import { Icon } from '@material-ui/core';
 
 
 export default class TableRender extends React.Component {
-state={
-    dataTable: [],
-    classes: null,
-    openDash: null,
-    setOpenDash: null,
-    labelB: null
-}
-tipoB = 1
-handleCloseDash = () => {
- // setOpenDash(null);
- //const {setOpenDash} = this.state
- this.setState({openDash: null})
-};
 constructor(props){
     super(props);
     this.state = {
@@ -72,10 +62,25 @@ constructor(props){
         classesM: props.classesM,
         openDash: null,
         setOpenDash: null,
-        labelB: 'NOMBRE'
+        labelB: 'NOMBRE',
+        openExpireDash: null,
+        opExp: 0.2
     };
     
 }
+tipoB = 1
+expiro = 0;
+handleCloseDash = () => {
+ // setOpenDash(null);
+ //const {setOpenDash} = this.state
+ this.setState({openDash: null})
+};
+
+handleCloseExpireDash = () => {
+ // setOpenDash(null);
+ //const {setOpenDash} = this.state
+ this.setState({openExpireDash: null})
+};
 
 round = (num, decimales = 2)=>{
   var signo = (num >= 0 ? 1 : -1);
@@ -90,10 +95,12 @@ round = (num, decimales = 2)=>{
   return signo * (num[0] + 'e' + (num[1] ? (+num[1] - decimales) : -decimales));
 }
 
+
 allClientes=async(cliente)=>{
     try {
 
        //const sendUri = "http://34.66.54.10:3015/";
+       //const GenExpHTML = GenExpHTML
        const sendUri = `${ip("2000")}clientes/get`;
        // const sendUri = "http://localhost:3015/";
         //const sendUri = "http://192.168.1.74:3015/";
@@ -121,10 +128,29 @@ allClientes=async(cliente)=>{
                   cliente: e.cliente,
                   telefono: e.telefono,
                   ubi: e.ubi,
-                  fechaPago: e.fechaPago,
-                  monto: e.monto,
-                  velocidad: e.velocidad,
-                })
+                  fechaPago: null,
+                  fechaDePago:  e.ultimoRecibo?e.ultimoRecibo.fechaPago:e.ultimoRecibo,
+                  monto: null,
+                  montor: e.ultimoRecibo?e.ultimoRecibo.monto:e.ultimoRecibo,
+                  idVelocidad: e.ultimoRecibo?e.ultimoRecibo.idVelocidad:e.ultimoRecibo,
+                  velocidad: e.ultimoRecibo?e.ultimoRecibo.velocidad:e.ultimoRecibo,
+                  expiro: e.expiro,
+                  refRow: React.createRef(),
+                  dateSI:  e.ultimoRecibo?e.ultimoRecibo.dateI:e.ultimoRecibo,
+                  dateSF:  e.ultimoRecibo?e.ultimoRecibo.dateF:e.ultimoRecibo,
+                  difDate:  e.ultimoRecibo?e.ultimoRecibo.difDate:e.ultimoRecibo,
+                });
+                console.log(data) 
+                if(e.expiro){
+                  this.expiro=1;
+                  data[data.length-1].fechaPago=<div  >
+                  <GenExpHTML c={this} refRow={data[data.length-1].refRow}  /> 
+                  <i style={{color: 'red'}} >{data[data.length-1].fechaDePago}</i>
+                  </div>
+                  data[data.length-1].monto=<><i style={{color: 'red'}} >{data[data.length-1].montor}</i></>
+                //  data[data.length-1].velocidad=<i style={{color: 'red'}} >{data[data.length-1].velocidad}</i>
+                }
+
              })
 
             }
@@ -174,6 +200,24 @@ changeDash = event => {
 handleClickDash = event => {
   this.changeDash(event);
 };
+
+changeExpireDash = event => {
+  const {openExpireDash} = this.state;
+  if (openExpireDash && openExpireDash.contains(event.target) ) {
+    //setOpenDash(null);
+    this.setState({openExpireDash: null});
+  } else {
+    //setOpenDash(event.currentTarget);
+    this.setState({openExpireDash: event.currentTarget});
+  }
+}
+
+handleClickExpireDash = event => {
+  console.log("clickExpireDash")
+  this.setState({opExp: 1})
+  //this.changeExpireDash(event);
+};
+
 selectionStartNombre = null
 selectionEndNombre = null
 handleUpper = e => {
@@ -251,7 +295,7 @@ render() {
                     />
                     <Button
                       color="white"
-                      onClick={this.handleClickDash}
+                      onMouseEnter={this.handleClickDash}
                       aria-label="edit"
                       aria-owns={openDash ? "profile-menu-list-grow" : null}
                       aria-haspopup="true"

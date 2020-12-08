@@ -32,6 +32,9 @@ import RobB from "../Typography/Roboto-Bold.ttf";
 import RobBI from "../Typography/Roboto-BoldItalic.ttf";
 import CustomInput from "components/CustomInput/CustomInput";
 import spellNumber from "views/Dashboard/spellNumber";
+//import Calendar from "react-calendar";
+import {Calendar} from "views/calendar"
+import {genRecibo} from "./methods"
 //import spellNumber from "./spellNumber";
 //import InformeM from "./InformeM";
 // reactstrap components
@@ -67,28 +70,49 @@ Font.register({
 });
 
 class App extends React.Component {
-  state = { url: null , dia: null, mes: null, año: null, renderPDF: null};
+  //state = { url: null , dia: null, mes: null, año: null, renderPDF: null};
+  tzoffset = (new Date()).getTimezoneOffset() * 60000;
+  dateSI = new Date(Date.now() - this.tzoffset);
+  dateSF = new Date(Date.now() - this.tzoffset);
+  idUsuario=0;
   constructor(props){
     super(props);
+    //corte.options.high = 1000000
+    //corte.data.labels = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"]
+    //corte.data.series = [[]]
+    this.tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    this.dateSI = new Date(Date.now() - this.tzoffset);
+    this.dateSF = new Date(Date.now() - this.tzoffset);
+    this.dateSI.setHours(0,0,0,0);
+    this.dateSF.setHours(0,0,0,0);
     const d = new Date();
+    console.log("props.monto")
+    console.log(props.monto)
     this.state={
       url:null,
       dia: d.getDate(),
       mes: d.getMonth(),
       año: d.getFullYear(),
       urbanoI: 0,
-      CTA: props.CTA,
+      idCliente: props.idCliente,
       nombre: props.nombre,
       ubi: props.ubi,
-      fecha: props.fecha,
       monto: props.monto,
-      añoF: props.añoF,
+      fechaPago: this.dateSI.toISOString(),
+      bandCR: true,
+      idVelocidad: props.idVelocidad,
       velocidad: props.velocidad,
-      totalA: spellNumber(parseInt(props.añoF) - parseInt(props.añoI)).replace('PESOS', '').replace('PESO', '')
+      pagar: props.pagar,
+      fechaSI: props.dateSI,
+      fechaSF: props.dateSF,
+      difDate: props.difDate
+      
     }
     
   }
-
+  
+    
+    
 
   onRender = ({ blob }) => {
     this.setState({ url: URL.createObjectURL(blob) });
@@ -106,12 +130,18 @@ class App extends React.Component {
   };
   
   handdleUp = (e) => {
-    const añoI = document.getElementById('añoI').value
-    const añoF = document.getElementById('añoF').value
-    const totalA = spellNumber(parseInt(añoF) - parseInt(añoI)).replace('PESOS', '').replace('PESO', '')
-    const ubi = document.getElementById('ubi').value
-
-    this.setState({ubi, añoI, añoF, totalA})
+    const nombre = document.getElementById('nombre').value;
+    const ubi = document.getElementById('ubi').value;
+    //const añoF = document.getElementById('añoF').value
+    //const totalA = spellNumber(parseInt(añoF) - parseInt(añoI)).replace('PESOS', '').replace('PESO', '')
+    const pagar = document.getElementById('pagar').value
+    const fechaPago = new Date(new Date(Date.now()) - this.tzoffset).toISOString().slice(0, -1)
+    let fechaSI = this.dateSI
+    let fechaSF = this.dateSF
+    fechaSI = new Date(fechaSI - this.tzoffset)
+    fechaSF = new Date(fechaSF - this.tzoffset)
+    
+    genRecibo(this,nombre,ubi,pagar,fechaPago,fechaSI,fechaSF)
   }
 
   handdleU = (e) => {
@@ -256,12 +286,37 @@ class App extends React.Component {
     }
 
   });
-
+onChangeDI = date => {
+  const {dateSF} = this.state
+  let dateNSF = new Date(dateSF)
+  dateNSF.setDate(dateSF.getDate() + 1);
+  console.log('DI00')
+  //this.obtenerOF(date, dateNSF)
+  this.setState({ dateSI: date })
+}
+onChangeDF = date => {
+  const {dateSI} = this.state
+  let dateNSF = new Date(date);
+  dateNSF.setDate(date.getDate() + 1);
+  console.log('DF00')
+  //this.obtenerOF(dateSI, dateNSF);
+  this.setState({ dateSF: date })
+}
+setTotal=(t,idV,v)=>{
+    const {difDate} = this.state
+    const pagar = t * difDate
+      
+    console.log(difDate)
+    console.log(pagar)
+    //c.setState({pagar})
+    this.setState({idVelocidad: idV,velocidad: v,pagar})
+} 
   render() {
     const {classes} = this.props
-    const {dia, CTA, nombre, ubi, fecha,monto, mes, año, añoI, añoF, velocidad} = this.state
-    const nDoc = `CARTA_INVITACION_CTA_${CTA}_${dia}_${mes}_${año}`
-
+    const {dia, idCliente, nombre, ubi, fechaPago, monto, mes, año,pagar, fechaSI, fechaSF, bandCR, añoF, idVelocidad, velocidad,difDate} = this.state
+    const nDoc = `RECIBO_CLIENTE_${idCliente}`
+    //const dateSI = "";
+    //const dateSF = "";
     return (
       <CardIcon>
         <GridContainer>
@@ -327,19 +382,37 @@ class App extends React.Component {
                     <DropdownMenu aria-labelledby="dropdownMenuLink" left>
                       <DropdownItem
                         href="#pablo"
-                        onClick={e => {this.setState({velocidad: e.target.innerHTML})}}
+                        onClick={e => {
+                          /*let difDate = 0
+                          let pagar = 0;
+                          const {fechaSI, fechaSF} = this.state
+                          const dateA = new Date(fechaSI);
+                          const dateB = new Date(fechaSF);
+                          //const {idVelocidad} = this.state;
+                          while(dateA<dateB){
+                            dateA.setMonth(dateA.getMonth()+1);
+                            difDate++;
+                          }*/
+                          this.setTotal(150,0,e.target.innerHTML)
+                        
+                        }}
                       >
                         10 MEGAS
                       </DropdownItem>
                       <DropdownItem
                         href="#pablo"
-                        onClick={e => {this.setState({velocidad: e.target.innerHTML})}}
+                        onClick={e => {
+                          this.setTotal(250,0,e.target.innerHTML)
+                        }}
                       >
                         20 MEGAS
                       </DropdownItem>
                       <DropdownItem
                         href="#pablo"
-                        onClick={e => {this.setState({velocidad: e.target.innerHTML})}}
+                        onClick={e => {
+                          this.setTotal(300,0,e.target.innerHTML)
+                        
+                        }}
                       >
                         30 MEGAS
                       </DropdownItem>
@@ -349,10 +422,36 @@ class App extends React.Component {
                   </UncontrolledDropdown>
                   
                     </GridItem>
-                    
+                  <GridItem xs={12} sm={12} md={3}>
+                      <CustomInput
+                        labelText="A PAGAR:"
+                        id="pagar"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          type: "number",
+                          //defaultValue: parseInt(pagar)===0?monto:pagar,
+                          value: monto
+                          //onBlur: this.handdleU
+                          //onKeyUp: this.handleUpper,
+                          //onMouseUp: this.handdleU
+                        }}
+                      />
+                    </GridItem>
+
                   </GridContainer>
                   <GridContainer>
-                    <Button color="primary" 
+                    <GridItem xs={12} sm={12} md={6}>
+                      <h4 className={classes.cardTitleBlack}>
+                        PERIODO DE PAGO:
+                      </h4>
+                      <Calendar c={this} />
+                    </GridItem>
+                  </GridContainer>
+
+                  <GridContainer>
+                    <Button color="success" 
                       style={{
                         display: "flex",
                         flex: 1,
@@ -360,7 +459,20 @@ class App extends React.Component {
                       }} 
                       onClick={this.handdleUp}
                       >
-                        Cargar DATOS
+                        PAGAR
+                      </Button>
+                  </GridContainer>
+                  <GridContainer>
+                    <Button color="danger" 
+                      style={{
+                        display: "flex",
+                        flex: 1,
+                        alignItems: "center"
+                      }} 
+                      onClick={this.handdleUp}
+                      disabled={bandCR}
+                      >
+                        CANCELAR PAGO
                       </Button>
                   </GridContainer>
                   <GridContainer>
@@ -368,7 +480,7 @@ class App extends React.Component {
                       display: "flex",
                       flex: 1,
                       alignItems: "center"}} href={this.state.url} download={`${nDoc}.pdf`}>  
-                      <Button color="success" 
+                      <Button color="info" 
                       style={{
                         display: "flex",
                         flex: 1,
@@ -392,7 +504,7 @@ class App extends React.Component {
                           INTERRED
                         </Text>
                         <Text style={[this.styles.headO,{position: "relative", top: 10, fontSize: 10}]} >
-                          INTERNET POR CABLE E INALAMBRICO
+                          INTERNET POR CABLE E INALÁMBRICO
                         </Text>
                         <Text style={[{position: "absolute", top: 10, left: 220, fontSize: 7}]} >
                           CORREO ELECTRÓNICO: CASMORNEZA@GMAIL.COM 
@@ -421,10 +533,10 @@ class App extends React.Component {
                         </View>
                         <View style={this.styles.tableRow}> 
                           <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                          <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{CTA}</Text> 
+                          <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{idCliente}</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                    <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{fecha}</Text> 
+                    <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{fechaPago}</Text> 
                           </View> 
                         </View>
                       </View>
@@ -435,7 +547,7 @@ class App extends React.Component {
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>CANTIDAD:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                    <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {monto}</Text> 
+                    <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {parseInt(difDate)===1?`${difDate} mes`:`${difDate} meses`}</Text> 
                           </View> 
                         </View>
                       </View>  
@@ -459,10 +571,10 @@ class App extends React.Component {
                         </View>
                         <View style={this.styles.tableRow}> 
                           <View style={[this.styles.tableCol,{width: '30%', borderColor: 'white', backgroundColor: 'black'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>MENSUALIDAD A CUBRIR:</Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>PERIODO DE PAGO:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}></Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{fechaSI+" > "+fechaSF}</Text> 
                           </View> 
                         </View>
                       </View>
@@ -470,10 +582,10 @@ class App extends React.Component {
                         
                         <View style={this.styles.tableRow}> 
                           <View style={[this.styles.tableCol,{width: '30%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>RECIBIDO POR:</Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>A PAGAR:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}></Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {parseInt(pagar)===0?monto:pagar}</Text> 
                           </View> 
                         </View>
                       </View>
@@ -521,7 +633,7 @@ class App extends React.Component {
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>0</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>12-11-03</Text> 
+                          <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{fechaPago}</Text> 
                           </View> 
                         </View>
                       </View>
@@ -556,7 +668,7 @@ class App extends React.Component {
                         </View>
                         <View style={this.styles.tableRow}> 
                           <View style={[this.styles.tableCol,{width: '30%', borderColor: 'white', backgroundColor: 'black'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>MENSUALIDAD A CUBRIR:</Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>PERIODO A PAGAR:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}></Text> 
@@ -567,10 +679,10 @@ class App extends React.Component {
                         
                         <View style={this.styles.tableRow}> 
                           <View style={[this.styles.tableCol,{width: '30%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>RECIBIDO POR:</Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>A PAGAR:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}></Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {pagar}</Text> 
                           </View> 
                         </View>
                       </View>
