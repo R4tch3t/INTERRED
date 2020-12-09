@@ -305,10 +305,12 @@ onChangeDF = date => {
   this.setState({ dateSF: date })
 }
 setTotal=(t,idV,v)=>{
-    const {difDate} = this.state
+    let {difDate} = this.state
+    difDate = difDate==="undefined"?1:difDate
+    console.log(`difDate: ${difDate}`)
     const monto = t * difDate
       
-    console.log(difDate)
+    
     console.log(monto)
     //c.setState({pagar})
     //console.log(difDate)
@@ -322,7 +324,7 @@ setTotal=(t,idV,v)=>{
     //const dateSF = ""
     return (
       <CardIcon>
-        {expiro && <>
+        {expiro === "1" && <>
             <div style={{position: 'absolute', opacity:1, top:80, paddingTop:15, backgroundColor: 'red', zIndex:9999, alignContent:'center', height: 50, borderRadius: 20, boxShadow: "4px 4px 4px 2px rgba(1, 1, 1, 0.2)",  borderWidth: 0.5, borderColor: 'black', elevation: 2}}>
                     <WN color="inherit"  
                     /> <i style={{color:'white'}} >¡ADVERTENCÍA! Él número de cliente presenta un adeudo, favor de hacer el pago.</i>
@@ -468,7 +470,7 @@ setTotal=(t,idV,v)=>{
                         alignItems: "center"
                       }} 
                       onClick={this.handdleUp}
-                      disabled={(!expiro||expiro==="undefined")&&monto!=="undefined"}
+                      disabled={expiro==="0"}
                       >
                         PAGAR
                       </Button>
@@ -481,7 +483,7 @@ setTotal=(t,idV,v)=>{
                         alignItems: "center"
                       }} 
                       onClick={this.handdleUp}
-                      disabled={(expiro&&expiro!=="undefined")||monto==="undefined"}
+                      disabled={expiro!=="0"}
                       >
                         CANCELAR PAGO
                       </Button>
