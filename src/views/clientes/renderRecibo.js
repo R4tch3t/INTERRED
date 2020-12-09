@@ -34,7 +34,7 @@ import CustomInput from "components/CustomInput/CustomInput";
 import spellNumber from "views/Dashboard/spellNumber";
 //import Calendar from "react-calendar";
 import {Calendar} from "views/calendar"
-import {genRecibo} from "./methods"
+import {delRecibo, genRecibo} from "./methods"
 import WN from "@material-ui/icons/Warning"
 //import spellNumber from "./spellNumber";
 //import InformeM from "./InformeM";
@@ -106,7 +106,9 @@ class App extends React.Component {
       pagar: props.pagar,
       fechaSI: props.dateSI,
       fechaSF: props.dateSF,
-      difDate: props.difDate
+      difDate: props.difDate,
+      bandGen: false,
+      idRecibo: props.idRecibo
       
     }
     
@@ -132,18 +134,28 @@ class App extends React.Component {
   
   handdleUp = (e) => {
     const {fechaSI,fechaSF} = this.state
+    //e.target.disabled = true
+    this.setState({bandGen: true})
+    
     const nombre = document.getElementById('nombre').value;
     const ubi = document.getElementById('ubi').value;
     //const añoF = document.getElementById('añoF').value
     //const totalA = spellNumber(parseInt(añoF) - parseInt(añoI)).replace('PESOS', '').replace('PESO', '')
-    const pagar = document.getElementById('pagar').value
-    const fechaPago = new Date(new Date(Date.now()) - this.tzoffset).toISOString().slice(0, -1)
+    const pagar = document.getElementById('pagar').value;
+    const fechaPago = new Date(new Date(Date.now()) - this.tzoffset).toISOString().slice(0, -1);
     let dateSI = new Date(fechaSI);
     let dateSF = new Date(fechaSF);
-    dateSI = new Date(dateSI - this.tzoffset)
-    dateSF = new Date(dateSF - this.tzoffset)
-    
+    dateSI = new Date(dateSI - this.tzoffset);
+    dateSF = new Date(dateSF - this.tzoffset);
     genRecibo(this,nombre,ubi,pagar,fechaPago,fechaSI,fechaSF)
+  }
+
+  handdleDel = (e) => {
+    const {idRecibo} = this.state
+    
+    delRecibo(idRecibo);
+
+
   }
 
   handdleU = (e) => {
@@ -318,7 +330,7 @@ setTotal=(t,idV,v)=>{
 } 
   render() {
     const {classes} = this.props
-    const {dia, idCliente, nombre, ubi, fechaPago, monto, mes, año,pagar, fechaSI, fechaSF, añoF, idVelocidad, velocidad,difDate, expiro} = this.state
+    const {dia, idCliente, nombre, ubi, fechaPago, monto, mes, año,pagar, fechaSI, fechaSF, añoF, idVelocidad, velocidad,difDate, expiro,bandGen,idRecibo} = this.state
     const nDoc = `RECIBO_CLIENTE_${idCliente}`
     //const dateSI = "";
     //const dateSF = ""
@@ -463,14 +475,14 @@ setTotal=(t,idV,v)=>{
                   </GridContainer>
 
                   <GridContainer>
-                    <Button color="success" 
+                    <Button id='btnPagar' color="success" 
                       style={{
                         display: "flex",
                         flex: 1,
                         alignItems: "center"
                       }} 
                       onClick={this.handdleUp}
-                      disabled={expiro==="0"}
+                      disabled={expiro==="0"||bandGen}
                       >
                         PAGAR
                       </Button>
@@ -482,8 +494,8 @@ setTotal=(t,idV,v)=>{
                         flex: 1,
                         alignItems: "center"
                       }} 
-                      onClick={this.handdleUp}
-                      disabled={expiro!=="0"}
+                      onClick={this.handdleDel}
+                      disabled={expiro!=="0"||bandGen}
                       >
                         CANCELAR PAGO
                       </Button>
@@ -598,7 +610,7 @@ setTotal=(t,idV,v)=>{
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>A PAGAR:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {parseInt(pagar)===0?monto:pagar}</Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {monto}</Text> 
                           </View> 
                         </View>
                       </View>
@@ -643,7 +655,7 @@ setTotal=(t,idV,v)=>{
                         </View>
                         <View style={this.styles.tableRow}> 
                           <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>0</Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{idCliente}</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '50%'}]}>  
                           <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{fechaPago}</Text> 
@@ -657,7 +669,7 @@ setTotal=(t,idV,v)=>{
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>CANTIDAD:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ 0</Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {parseInt(difDate)===1?`${difDate} mes`:`${difDate} meses`}</Text> 
                           </View> 
                         </View>
                       </View>  
@@ -668,7 +680,7 @@ setTotal=(t,idV,v)=>{
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>NOMBRE DEL CLIENTE:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}></Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{nombre}</Text> 
                           </View> 
                         </View>
                         <View style={this.styles.tableRow}> 
@@ -676,7 +688,7 @@ setTotal=(t,idV,v)=>{
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>UBICACIÓN:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}></Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{ubi}</Text> 
                           </View> 
                         </View>
                         <View style={this.styles.tableRow}> 
@@ -684,7 +696,7 @@ setTotal=(t,idV,v)=>{
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>PERIODO A PAGAR:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}></Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{fechaSI+" > "+fechaSF}</Text> 
                           </View> 
                         </View>
                       </View>
@@ -695,7 +707,7 @@ setTotal=(t,idV,v)=>{
                             <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>A PAGAR:</Text> 
                           </View>
                           <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {pagar}</Text> 
+                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {monto}</Text> 
                           </View> 
                         </View>
                       </View>

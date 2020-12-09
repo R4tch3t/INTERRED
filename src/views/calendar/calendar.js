@@ -18,7 +18,9 @@ export default function DateRangePickerExample(props) {
         //const pagarH = document.getElementById("pagar")
         //pagarH.value="250"
         //c.setState({pagar: 250})
-        setStartDate(date);}}
+        //c.setState({fechaSI: date})
+        setStartDate(date);
+      }}
       onEndDateChange={(date)=>{
         let difDate = 0
         let pagar = 0;
@@ -41,8 +43,13 @@ export default function DateRangePickerExample(props) {
             pagar = 150 * difDate
           break
         }
-        c.setState({pagar,difDate})
-        setEndDate(date);}}
+        
+        c.setState({pagar,difDate,fechaSI: startDate, fechaSF: date});
+        console.log(c.state.fechaSI)
+        console.log(c.state.fechaSF)
+        console.log(date)
+        setEndDate(date);
+      }}
       //minimumDate={new Date()}
       //minimumLength={1}
       format='dd MMM yyyy'

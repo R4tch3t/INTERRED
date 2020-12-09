@@ -1,2 +1,3 @@
 import genRecibo from "./genRecibo"
-export{genRecibo}
+import delRecibo from "./delRecibo"
+export{genRecibo,delRecibo}

@@ -98,6 +98,7 @@ export default () => {
   const dateSF = getParameterByName('dateSF', urlDec)
   const difDate = getParameterByName("difDate",urlDec)
   const expiro = getParameterByName("expiro",urlDec)
+  const idRecibo = getParameterByName("idRecibo",urlDec)
   const [state, setState] = React.useState({bigChartData: 'data1'})
   const setBgChartData = name => {
     /*this.setState({
@@ -198,7 +199,7 @@ export default () => {
                     {bandCTA==='1' && 
                       <Pdf classes={classes} idCliente={idCliente}  nombre={nombre}
                         ubi={ubi} fecha={fecha} monto={monto} idVelocidad={idVelocidad} dateSI={dateSI} dateSF={dateSF} velocidad={velocidad}
-                        pagar={pagar} difDate={difDate} expiro={expiro}   />
+                        pagar={pagar} difDate={difDate} expiro={expiro} idRecibo={idRecibo}  />
                     }
                     {bandCTA!=='1' && 
                       <TablesClientes
