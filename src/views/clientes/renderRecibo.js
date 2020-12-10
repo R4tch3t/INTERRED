@@ -151,9 +151,7 @@ class App extends React.Component {
   }
 
   handdleDel = (e) => {
-    const {idRecibo} = this.state
-    
-    delRecibo(idRecibo);
+    delRecibo(this);
 
 
   }
