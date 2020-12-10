@@ -50,7 +50,6 @@ import {
   Table,
   Row,
   Col,
-  UncontrolledTooltip
 } from "reactstrap";
 
 Font.register({
@@ -108,7 +107,9 @@ class App extends React.Component {
       fechaSF: props.dateSF,
       difDate: props.difDate,
       bandGen: false,
-      idRecibo: props.idRecibo
+      idRecibo: props.idRecibo,
+      setMsg: props.setMsg,
+      setColor: props.setColor
       
     }
     
@@ -424,7 +425,7 @@ setTotal=(t,idV,v)=>{
                       <DropdownItem
                         href="#pablo"
                         onClick={e => {
-                          this.setTotal(250,0,e.target.innerHTML)
+                          this.setTotal(250,1,e.target.innerHTML)
                         }}
                       >
                         20 MEGAS
@@ -432,7 +433,7 @@ setTotal=(t,idV,v)=>{
                       <DropdownItem
                         href="#pablo"
                         onClick={e => {
-                          this.setTotal(300,0,e.target.innerHTML)
+                          this.setTotal(300,2,e.target.innerHTML)
                         
                         }}
                       >

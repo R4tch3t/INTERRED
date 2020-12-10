@@ -5,7 +5,7 @@ const genCTA = (idCliente, nombre, ubi, fecha, monto, velocidad, idVelocidad, da
     //const idRol = cookie.load('idRol')
     const idRol = "1";
     let url = idRol === '1' ? `/admin/listaClientes` : `/usuario/listaClientes`
-    let subUrl = `?bandCTA=1&idCliente=${idCliente}&nombre=${nombre}&ubi=${ubi}&fecha=${fecha}&dateSI=${dateSI}&dateSF=${dateSF}&monto=${monto}&idVelocidad=${idVelocidad}&velocidad=${velocidad}&difDate=${difDate}&expiro=${expiro}&pagar=0&idRecibo=${idRecibo}`
+    let subUrl = `?bandCTA=1&idCliente=${idCliente}&nombre=${nombre}&ubi=${ubi}&fecha=${fecha}&dateSI=${dateSI}&dateSF=${dateSF}&monto=${monto}&idVelocidad=${idVelocidad}&velocidad=${velocidad}&difDate=${difDate}&expiro=${expiro}&pagar=0&idRecibo=${idRecibo}&isUpdated=1`
     console.log(subUrl)
     url += `?v=${encrypt(subUrl)}`;
     //window.history.pushState(null,'Administrador','#/admin/creditos')

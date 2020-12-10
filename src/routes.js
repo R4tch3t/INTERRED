@@ -17,6 +17,7 @@
 */
 import Dashboard from "views/Dashboard.js";
 import listaClientes from "views/clientes/listaClientes.js";
+import addClientes from "views/clientes/addClientes.js";
 
 var routes = [
   {
@@ -38,7 +39,7 @@ var routes = [
     path: "/agregarCliente",
     name: "Agregar cliente",
     icon: "tim-icons icon-simple-add",
-    component: Dashboard,
+    component: addClientes,
     layout: "/admin"
   },
  /* {

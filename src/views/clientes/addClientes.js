@@ -39,7 +39,7 @@ import {
   Col,
   UncontrolledAlert
 } from "reactstrap";
-
+import ClientesAddForm from "./ClientesAddForm"
 // core components
 import {
   chartExample1,
@@ -82,42 +82,15 @@ export default () => {
   const classesM = useStylesM();
   let urlDec = getParameterByName('v');
   urlDec = decrypt(urlDec);
-  const bandCTA = getParameterByName('bandCTA', urlDec)
-  const idCliente = getParameterByName('idCliente', urlDec)
-  const nombre = getParameterByName('nombre', urlDec)
-  const ubi = getParameterByName('ubi', urlDec)
-  const fecha = getParameterByName('fecha', urlDec)
-  const monto = getParameterByName('monto', urlDec)
-  console.log(fecha)
-  const añoI = getParameterByName('añoI', urlDec)
-  const añoF = getParameterByName('añoF', urlDec)
-  const pagar = getParameterByName('pagar', urlDec)
-  const velocidad = getParameterByName('velocidad', urlDec)
-  const idVelocidad = getParameterByName('idVelocidad', urlDec)
-  const dateSI = getParameterByName('dateSI', urlDec)
-  const dateSF = getParameterByName('dateSF', urlDec)
-  const difDate = getParameterByName("difDate",urlDec)
-  const expiro = getParameterByName("expiro",urlDec)
-  const idRecibo = getParameterByName("idRecibo",urlDec)
-  const isUpdated = getParameterByName("isUpdated",urlDec)
-  //const isDeleted = getParameterByName("isDeleted",urlDec)
-  const [state, setState] = React.useState({bigChartData: 'data1'})
+  
+  const [state, setState] = React.useState({bigChartData: 'data2'})
   const setBgChartData = name => {
     /*this.setState({
       bigChartData: name
     });*/
   };
-  //msg = "";
-  //color = "";
   let msgV = ""
   let colorV = ""
-  if(isUpdated==="1"){
-    msgV="El Pago se realizó con éxito"
-    colorV="success"
-  }/*else if(isDeleted==="1") {
-    setMsg("El Recibo se eliminó con éxito")
-    setColor("danger")
-  }*/
   const [msg, setMsg] = React.useState(msgV)
   const [color, setColor] = React.useState(colorV)
     return (
@@ -133,8 +106,8 @@ export default () => {
                 <CardHeader>
                   <Row>
                     <Col className="text-left" sm="6">
-                      <h5 className="card-category">{bandCTA==="1"?"Pagos":"Clientes"}</h5>
-                      <CardTitle tag="h2">{bandCTA==="1"?"RECIBOS":"REGISTRADOS"}</CardTitle>
+                      <h5 className="card-category">Registrar</h5>
+                      <CardTitle tag="h2">CLIENTES</CardTitle>
                     </Col>
                     <Col sm="6">
                       <ButtonGroup
@@ -152,7 +125,7 @@ export default () => {
                           onClick={() => setBgChartData("data1")}
                         >
                           <input
-                            defaultChecked
+                            
                             className="d-none"
                             name="options"
                             type="radio"
@@ -175,12 +148,13 @@ export default () => {
                           onClick={() => setBgChartData("data2")}
                         >
                           <input
+                          defaultChecked
                             className="d-none"
                             name="options"
                             type="radio"
                           />
                           <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                            Purchases
+                            Registrar Clientes
                           </span>
                           <span className="d-block d-sm-none">
                             <i className="tim-icons icon-gift-2" />
@@ -214,15 +188,7 @@ export default () => {
                 </CardHeader>
                 <CardBody>
                   <div >
-                    {bandCTA==='1' && 
-                      <Pdf classes={classes} idCliente={idCliente}  nombre={nombre}
-                        ubi={ubi} fecha={fecha} monto={monto} idVelocidad={idVelocidad} dateSI={dateSI} dateSF={dateSF} velocidad={velocidad}
-                        pagar={pagar} difDate={difDate} expiro={expiro} idRecibo={idRecibo} setMsg={setMsg} setColor={setColor} />
-                    }
-                    {bandCTA!=='1' && 
-                      <TablesClientes
-                        classes={classes} classesM={classesM} />
-                    }                  
+                    <ClientesAddForm setMsg={setMsg} setColor={setColor} />                 
                     {/*<Line
                       data={chartExample1[this.state.bigChartData]}
                       options={chartExample1.options}

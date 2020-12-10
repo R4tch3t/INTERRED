@@ -25,10 +25,10 @@ function getParameterByName(name, url) {
   }
 export default async (c) => {
     try{
-    const {idRecibo} = c.state
+    const {idRecibo,idCliente, setMsg, setColor} = c.state
     const sendUri = `${ip("2000")}clientes/delRecibo`;
     const bodyJSON = {
-          idRecibo
+          idRecibo,idCliente
     }
     const response = await fetch(sendUri, {
         method: "POST",
@@ -41,8 +41,12 @@ export default async (c) => {
 
     const responseJson = await response.json().then(r => {
         //alert(r.exito)
+        setMsg("El Pago se eliminó con éxito...")
+        setColor("danger")
             if(r.adeuda){
                 c.setState({bandGen: false,expiro: "1"});
+            }else{
+                c.setState({bandGen: false,expiro: "u"});
             }
     });
     }catch(e){

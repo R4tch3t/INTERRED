@@ -31,7 +31,7 @@ export default function DateRangePickerExample(props) {
           dateA.setMonth(dateA.getMonth()+1);
           difDate++;
         }
-        
+        console.log(`idVelocidad: ${idVelocidad}`)
         switch(idVelocidad){
           case 1: 
             pagar = 250 * difDate
@@ -43,8 +43,8 @@ export default function DateRangePickerExample(props) {
             pagar = 150 * difDate
           break
         }
-        
-        c.setState({pagar,difDate,fechaSI: startDate, fechaSF: date});
+        const monto = pagar
+        c.setState({monto,difDate,fechaSI: startDate.toISOString(), fechaSF: date.toISOString()});
         console.log(c.state.fechaSI)
         console.log(c.state.fechaSF)
         console.log(date)
