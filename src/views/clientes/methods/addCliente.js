@@ -18,6 +18,7 @@ export default async (c,nombre,telefono,ubi) => {
    
     const responseJson = await response.json().then(r => {
         //alert(r.exito)
+        setMsg("")
         setMsg("El Cliente se registró con éxito...")
         setColor("success")
             if(r.exito){
