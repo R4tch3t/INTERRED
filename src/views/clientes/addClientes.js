@@ -122,7 +122,10 @@ export default () => {
                           color="info"
                           id="0"
                           size="sm"
-                          onClick={() => setBgChartData("data1")}
+                          onClick={() => {
+                            window.history.pushState(null,'Administrador','/admin/listaClientes')
+                            window.history.go()
+                          }}
                         >
                           <input
                             

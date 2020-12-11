@@ -172,7 +172,10 @@ export default () => {
                           className={classNames("btn-simple", {
                             active: state.bigChartData === "data2"
                           })}
-                          onClick={() => setBgChartData("data2")}
+                          onClick={() => {
+                            window.history.pushState(null,'Administrador','/admin/agregarCliente')
+                            window.history.go()
+                          }}
                         >
                           <input
                             className="d-none"

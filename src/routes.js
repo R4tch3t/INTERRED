@@ -37,7 +37,7 @@ var routes = [
   },
   {
     path: "/agregarCliente",
-    name: "Agregar cliente",
+    name: "Registrar cliente",
     icon: "tim-icons icon-simple-add",
     component: addClientes,
     layout: "/admin"
