@@ -240,7 +240,7 @@ buscarCTA = (key) => (event) => {
   const CTAnombre = document.getElementById('CTANM').value;
   //const checkU = document.getElementById('check0');
   this.tipoB = key
-  const labelB = key===0?'CTA':'NOMBRE'
+  const labelB = key===0?'ID':'NOMBRE'
   this.setState({labelB})
   //if (CTAnombre !== '') {
   this.allClientes(CTAnombre)    
@@ -261,6 +261,7 @@ render() {
     labelB
   } = this.state;
   const headCells = [
+    { id: 'idCliente', numeric: false, disablePadding: true, label: 'ID' },
     { id: 'cliente', numeric: false, disablePadding: true, label: 'Cliente' },
     { id: 'tel', numeric: false, disablePadding: false, label: 'Telefono' },
     { id: 'ubi', numeric: false, disablePadding: false, label: 'Ubicación del servicio' },
@@ -297,7 +298,8 @@ render() {
                     />
                     <Button
                       color="white"
-                      onMouseEnter={this.handleClickDash}
+                      onMouseEnter={(e)=>{this.setState({openDash: e.currentTarget});}}
+                      onMouseUp={this.handleClickDash}
                       aria-label="edit"
                       aria-owns={openDash ? "profile-menu-list-grow" : null}
                       aria-haspopup="true"
@@ -335,7 +337,7 @@ render() {
                                   className={classesM.dropdownItem}
                                   onClick={this.buscarCTA(0)}
                                 >
-                                  Por CTA.
+                                  Por ID.
                                 </MenuItem>
                                 <MenuItem
                                   key={"nombre"}

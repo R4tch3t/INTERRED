@@ -23,6 +23,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import LogoI from "assets/img/INTERRED.jpg";
+import pie from "assets/img/pie.jpg";
 /*import LogoC from "../Icons/LOGOI.jpeg";
 import marca from "../Icons/marcagua.png";
 import LogoD from "../Icons/LOGOD.jpeg";
@@ -190,12 +191,12 @@ class App extends React.Component {
       left: 20,
       top: 20
     },
-    logoC: {
+    pie: {
       position: "absolute",
-      width: 150,
-      height: 50,
-      left: 230,
-      top: 40
+      width: "100%",
+      height: 375,
+      left: 0,
+      bottom: 0
     },
     logoD: {
       position: "absolute",
@@ -619,103 +620,8 @@ setTotal=(t,idV,v)=>{
                         </Text>
                         
                       </View>
-                      <Image src={LogoI} style={[this.styles.logoI, {top: 400}]} />
-                      <View style={[this.styles.headV, {top: 180}]} >
-                        <Text style={[this.styles.headO,{position: "relative", top: 10, fontSize: 10}]} >
-                          INTERRED
-                        </Text>
-                        <Text style={[this.styles.headO,{position: "relative", top: 10, fontSize: 10}]} >
-                          INTERNET POR CABLE E INALAMBRICO
-                        </Text>
-                        <Text style={[{position: "absolute", top: 10, left: 220, fontSize: 7}]} >
-                          CORREO ELECTRÓNICO: CASMORNEZA@GMAIL.COM 
-                        </Text>
-                        <Text style={[{position: "absolute", top: 20, left: 220, fontSize: 7}]} >
-                          DIRECCIÓN: CALLE DEL CAMPESINO S/N.
-                        </Text>
-                        <Text style={[{position: "absolute", top: 30, left: 220, fontSize: 7}]} >
-                          COLONIA EMILIANO ZAPATA.
-                        </Text>
-                        
-                      </View>
-                     <View style={[this.styles.headT,{top: 220}]} >
-                      <Text style={[{ fontSize: 12}]} >
-                          RECIBO DE PAGO
-                      </Text>
-                     </View>
-                     <View style={[this.styles.table, {top: 225, left: 320}]}> 
-                        <View style={this.styles.tableRow}> 
-                          <View style={[this.styles.tableCol,{width: '50%', borderColor: 'white', backgroundColor: 'black'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white'}]}>RECIBO NÚMERO</Text> 
-                          </View>
-                          <View style={[this.styles.tableCol,{width: '50%', borderColor: 'white', backgroundColor: 'black'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white'}]}>FECHA DE PAGO</Text> 
-                          </View> 
-                        </View>
-                        <View style={this.styles.tableRow}> 
-                          <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{idCliente}</Text> 
-                          </View>
-                          <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                          <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{fechaPago}</Text> 
-                          </View> 
-                        </View>
-                      </View>
-                      <View style={[this.styles.table, {top: 235, left: 443, width: '20%'}]}> 
-                        
-                        <View style={this.styles.tableRow}> 
-                          <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>CANTIDAD:</Text> 
-                          </View>
-                          <View style={[this.styles.tableCol,{width: '50%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {parseInt(difDate)===1?`${difDate} mes`:`${difDate} meses`}</Text> 
-                          </View> 
-                        </View>
-                      </View>  
-
-                      <View style={[this.styles.table, {top: 255, left: 20, width: '90%'}]}> 
-                        <View style={this.styles.tableRow}> 
-                          <View style={[this.styles.tableCol,{width: '30%', borderColor: 'white', backgroundColor: 'black'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>NOMBRE DEL CLIENTE:</Text> 
-                          </View>
-                          <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{nombre}</Text> 
-                          </View> 
-                        </View>
-                        <View style={this.styles.tableRow}> 
-                          <View style={[this.styles.tableCol,{width: '30%', borderColor: 'white', backgroundColor: 'black'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>UBICACIÓN:</Text> 
-                          </View>
-                          <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{ubi}</Text> 
-                          </View> 
-                        </View>
-                        <View style={this.styles.tableRow}> 
-                          <View style={[this.styles.tableCol,{width: '30%', borderColor: 'white', backgroundColor: 'black'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, color: 'white', textAlign: 'left'}]}>PERIODO A PAGAR:</Text> 
-                          </View>
-                          <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>{fechaSI+" > "+fechaSF}</Text> 
-                          </View> 
-                        </View>
-                      </View>
-                      <View style={[this.styles.table, {top: 275, left: 20, width: '40%'}]}> 
-                        
-                        <View style={this.styles.tableRow}> 
-                          <View style={[this.styles.tableCol,{width: '30%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2}]}>A PAGAR:</Text> 
-                          </View>
-                          <View style={[this.styles.tableCol,{width: '70%'}]}>  
-                            <Text style={[this.styles.tableCell,this.styles.headO,{paddingVertical: 2, textAlign: 'left'}]}>$ {monto}</Text> 
-                          </View> 
-                        </View>
-                      </View>
-                      <View style={[this.styles.headV, {top: 305, left: 20}]} >
-                        <Text style={[this.styles.headO,{position: "relative", fontSize: 10, width: '90%'}]} >
-                          Le recordamos realizar su pago, antes de su fecha límite, sí tu mensualidad se venció y no cuentas con el servicio, al realizar tu pago tendrá que esperar un aproximado de 24 horas para que su señal vuelva a reactivarse INTERRED AGRADECE TU PREFERENCIA Navega más rápido...............................................................................
-                        </Text>
-                        
-                      </View>
+                      <Image src={pie} style={this.styles.pie} />
+                     
                     </Page>
                   </Document>
                   </PDFViewer>

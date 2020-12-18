@@ -261,6 +261,11 @@ export default function CustomTable(props) {
                 <TableCell className={classes.tableCell} 
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
                   onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}} >
+                  {row.key}
+                </TableCell>
+                <TableCell className={classes.tableCell} 
+                  onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
+                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}} >
                   {row.cliente}
                 </TableCell>
                 <TableCell className={classes.tableCell}

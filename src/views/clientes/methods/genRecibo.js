@@ -47,7 +47,8 @@ export default async (c, nombre, ubi, monto, fechaPago, fechaSI, fechaSF) => {
           fechaPago, 
           dateI: fechaSI,
           dateF: fechaSF,
-          difDate
+          difDate,
+          idVelocidad 
 
     }
     const response = await fetch(sendUri, {
