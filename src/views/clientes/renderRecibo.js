@@ -620,7 +620,7 @@ setTotal=(t,idV,v)=>{
                         </Text>
                         
                       </View>
-                      <Image src={pie} style={this.styles.pie} />
+                      {/*<Image src={pie} style={this.styles.pie} />*/}
                      
                     </Page>
                   </Document>

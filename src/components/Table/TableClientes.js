@@ -281,6 +281,16 @@ export default function CustomTable(props) {
                 <TableCell className={classes.tableCell}
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
                   onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}>
+                  {row.dateSI?row.dateSI:(<i>Sin recibo</i>)}
+                </TableCell>
+                <TableCell className={classes.tableCell}
+                  onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
+                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}>
+                  {row.dateSF?row.dateSF:(<i>Sin recibo</i>)}
+                </TableCell>
+                <TableCell className={classes.tableCell}
+                  onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
+                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}>
                   {row.fechaPago?row.fechaPago:(row.fechaDePago?row.fechaDePago:(<i>Sin recibo</i>))}
                 </TableCell>
                 <TableCell className={classes.tableCell}

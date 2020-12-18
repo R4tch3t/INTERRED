@@ -265,6 +265,8 @@ render() {
     { id: 'cliente', numeric: false, disablePadding: true, label: 'Cliente' },
     { id: 'tel', numeric: false, disablePadding: false, label: 'Telefono' },
     { id: 'ubi', numeric: false, disablePadding: false, label: 'Ubicación del servicio' },
+    { id: 'fechaSI', numeric: false, disablePadding: false, label: 'Inicia' },
+    { id: 'fechaSF', numeric: false, disablePadding: false, label: 'Finalizá' }, 
     { id: 'fechaPago', numeric: false, disablePadding: false, label: 'Fecha de pago' },
     { id: 'montoPagar', numeric: true, disablePadding: false, label: 'Monto a pagar' },
     { id: 'velocidad', numeric: false, disablePadding: false, label: 'Velocidad' },
