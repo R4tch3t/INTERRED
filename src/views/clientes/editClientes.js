@@ -23,34 +23,36 @@ import {
   UncontrolledAlert
 } from "reactstrap";
 import ClientesAddForm from "./ClientesAddForm"
-// core components
-import {
-  chartExample1,
-  chartExample2,
-  chartExample3,
-  chartExample4
-} from "variables/charts.js";
 
-import TablesClientes from "./TablesClientes.js";
+// core components
+
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import stylesM from "assets/jss/material-dashboard-react/components/listItemStyle.js";
-import decrypt from "views/Dashboard/decrypt.js";
-import Pdf from "./renderRecibo"
 
 const useStyles = makeStyles(styles);
 const useStylesM = makeStyles(stylesM);
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
+  console.log(url)
+  /*
   name = name.replace(/[\[\]]/g, '\\$&');
-  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+  var regex = new RegExp('[/&]' + name + '(=([^&#]*)|&|#|$)'),
     results = regex.exec(url);
   if (!results) return '';
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  */
 }
+function getId(url=window.location.href) {
+  //if (!url) url = window.location.href;
+  console.log(url)
+  const a = url.split("/");
+  return a[a.length-1]
+}
+
 export default () => {
 
   //
@@ -63,19 +65,25 @@ export default () => {
   }*/
   const classes = useStyles();
   const classesM = useStylesM();
-  let urlDec = getParameterByName('v');
-  urlDec = decrypt(urlDec);
+  //let urlDec = getParameterByName('v');
+  const idCliente = getId();
+  console.log(idCliente);
+  //urlDec = decrypt(urlDec);
   
-  const [state, setState] = React.useState({bigChartData: 'data2'})
+  const [state, setState] = React.useState({bigChartData: 'data2'});
   const setBgChartData = name => {
     /*this.setState({
       bigChartData: name
     });*/
   };
-  let msgV = ""
-  let colorV = ""
-  const [msg, setMsg] = React.useState(msgV)
-  const [color, setColor] = React.useState(colorV)
+  let msgV = "";
+  let colorV = "";
+  const [msg, setMsg] = React.useState(msgV);
+  const [color, setColor] = React.useState(colorV);
+  //const [nombre, setNombre] = React.useState("");
+  //const [telefono, setTelefono] = React.useState("");
+  //const [ubi, setUbi] = React.useState("");
+ 
     return (
       <>
         <div className="content">
@@ -90,7 +98,7 @@ export default () => {
                   <Row>
                     <Col className="text-left" sm="6">
                       <h5 className="card-category">Clientes</h5>
-                      <CardTitle tag="h2">REGISTRAR</CardTitle>
+                      <CardTitle tag="h2">EDITAR</CardTitle>
                     </Col>
                     <Col sm="6">
                       <ButtonGroup
@@ -174,7 +182,9 @@ export default () => {
                 </CardHeader>
                 <CardBody>
                   <div >
-                    <ClientesAddForm setMsg={setMsg} setColor={setColor} />                 
+                    <ClientesAddForm setMsg={setMsg} setColor={setColor} idCliente={idCliente} nombre={" "}
+                    telefono={" "} ubi={" "}
+                    bandEdit={true} />                 
                     {/*<Line
                       data={chartExample1[this.state.bigChartData]}
                       options={chartExample1.options}

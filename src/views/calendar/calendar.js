@@ -19,6 +19,10 @@ export default function DateRangePickerExample(props) {
         //pagarH.value="250"
         //c.setState({pagar: 250})
         //c.setState({fechaSI: date})
+        if(c.bandWrappCalendar){
+          c.state.fechaSI = date;
+
+        }
         setStartDate(date);
       }}
       onEndDateChange={(date)=>{
@@ -44,7 +48,11 @@ export default function DateRangePickerExample(props) {
           break
         }
         const monto = pagar
-        c.setState({monto,difDate,fechaSI: startDate.toISOString(), fechaSF: date.toISOString()});
+        if(c.bandWrappCalendar){
+          c._setState({monto,difDate,fechaSI: startDate.toISOString(), fechaSF: date.toISOString(), bandLock: false});
+        }else{
+          c.setState({monto,difDate,fechaSI: startDate.toISOString(), fechaSF: date.toISOString()});
+        }
         console.log(c.state.fechaSI)
         console.log(c.state.fechaSF)
         console.log(date)
@@ -62,7 +70,8 @@ export default function DateRangePickerExample(props) {
             {...startDateInputProps}
             placeholder='Fecha inicial'
             style={{marginRight: 20}}
-            value={c.state.fechaSI!=="undefined"?c.state.fechaSI:""}
+            value={c.state.fechaSI!=="undefined"?c.state.fechaSI:(startDate?startDate:"")}
+            disabled={c.state.bandLock}
           />
            {">"}
           <input
@@ -70,7 +79,8 @@ export default function DateRangePickerExample(props) {
             {...endDateInputProps}
             placeholder='Fecha final'
             style={{marginLeft: 20}}
-            value={c.state.fechaSF!=="undefined"?c.state.fechaSF:""}
+            value={c.state.fechaSF!=="undefined"?c.state.fechaSF:(endDate?endDate:"")}
+            disabled={c.state.bandLock}
           />
         </div>
       )}

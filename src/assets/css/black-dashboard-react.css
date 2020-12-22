@@ -433,6 +433,20 @@ mark,
   font-size: 90%;
   color: #6c757d; }
 
+.wrapperClientes {
+  position: absolute;
+  left: 260px;
+  opacity: 1;
+  -webkit-transition: all 0.7s ease-out;
+  -moz-transition: all 0.7s ease-out;
+  -ms-transition: all 0.7s ease-out;
+  -o-transition: all 0.7s ease-out;
+  transition: all 0.7s ease-out;
+}
+.unlockClientes {
+  margin-left: 60px;
+  
+}
 code {
   font-size: 87.5%;
   color: #f3a4b5;

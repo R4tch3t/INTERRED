@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 // @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Table from "@material-ui/core/Table";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableHead from "@material-ui/core/TableHead";
@@ -11,11 +11,20 @@ import TableCell from "@material-ui/core/TableCell";
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Button from "components/CustomButtons/Button.js";
 import cookie from "react-cookies";
+import Fab from '@material-ui/core/Fab';
+import CheckBox from '@material-ui/icons/Check';
+import Zoom from '@material-ui/core/Zoom';
 // core components
 import styles from "assets/jss/material-dashboard-react/components/tableStyle.js";
 import encrypt from "views/Dashboard/encrypt";
 import GridContainer from "components/Grid/GridContainer";
-import MiWifi from "miwifi/miwifi";
+import {Calendar} from "views/calendar"
+import {
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+} from "reactstrap";
 
 const useStyles = makeStyles(styles);
 function desc(a, b, orderBy) {
@@ -197,25 +206,69 @@ const genCarta = (CTA, nombre, ubi, tp) => {
   const win = window.open(url, '_blank');
   win.focus();
 }
+class wrappCalendar {
+  tzoffset = (new Date()).getTimezoneOffset() * 60000;
+  dateSI = new Date(Date.now() - this.tzoffset);
+  dateSF = new Date(Date.now() - this.tzoffset);
+  idUsuario=0;
+  bandWrappCalendar = true;
+  constructor(props){
+   // super(props);
+    //corte.options.high = 1000000
+    //corte.data.labels = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"]
+    //corte.data.series = [[]]
+    this.tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    this.dateSI = new Date(Date.now() - this.tzoffset);
+    this.dateSF = new Date(Date.now() - this.tzoffset);
+    this.dateSI.setHours(0,0,0,0);
+    this.dateSF.setHours(0,0,0,0);
+    const d = new Date();
+    this.state={
+      fechaSI: props.dateSI,
+      fechaSF: props.dateSF,
+      monto: props.monto, 
+      difDate: props.difDate,
+      idVelocidad: props.idVelocidad,
+      bandLock: props.bandLock
+    }
+    
+  }
+  _setState=(v)=>{
+    const {fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock} = v
+    this.state.fechaSI = fechaSI;
+    this.state.fechaSF = fechaSF;
+    this.state.monto = monto;
+    this.state.difDate = difDate;
+    this.state.idVelocidad = idVelocidad;
+    this.state.bandLock = bandLock;
+    //this.setState({fechaSI, fechaSF, monto, difDate, idVelocidad});
+  }
+}
 export default function CustomTable(props) {
   
   const classes = useStyles();
-  const { tableHead, tableData, tableHeaderColor } = props;
+  const { tableHead, tableData, tableHeaderColor, c } = props;
   const [dense, setDense] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('ID');
-  const rows = tableData
+  const rows = tableData;
+  const {bandLock} = props.c
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+  //const c = new wrappCalendar();
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const theme = useTheme();
+  const transitionDuration = {
+    enter: theme.transitions.duration.enteringScreen,
+    exit: theme.transitions.duration.leavingScreen,
+  };
+  
   const handleRequestSort = (event, property) => {
     const isDesc = orderBy === property && order === 'desc';
     setOrder(isDesc ? 'asc' : 'desc');
@@ -258,10 +311,128 @@ export default function CustomTable(props) {
                 }
               }} 
         className={classes.tableBodyRow}>
-                <TableCell className={classes.tableCell} 
+                <TableCell className={classes.tableCell} style={{textAlign: 'center', 
+                WebkitTransition: 'all 0.7s ease-out',
+                transition: 'all 0.7s ease-out'}}
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
-                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}} >
+                  onMouseUp={(e)=>{
+                    e.currentTarget.style.webkitTransition="all 0.7s ease-out";
+                    e.currentTarget.style.transition="all 0.7s ease-out";
+                    if(bandLock){
+                      genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)
+                    }else{
+
+                    }
+                    }} >
                   {row.key}
+                  <Zoom
+                    //key={fab.color}
+                    in={!bandLock}
+                    onClick={(e)=>{
+                    console.log(e)
+                    c.deleteStack[row.key]=row.key
+                    if(e.target.nodeName!=="BUTTON"){
+                      e=e.target.parentElement
+                      while(e.nodeName!=="BUTTON"){
+                        e=e.parentElement
+                      }
+                    }else{
+                      e=e.target
+                    }
+                    if(e.id==="checked"+row.key){
+                          e.id=""
+                          e.style.opacity=0.5
+                        }else{
+                          e.id="checked"+row.key
+                          e.style.opacity=1
+                        }
+                      /*
+                      if(e.target.childElementCount===1){
+                        if(e.target.parentElement.id==="checked"+row.key){
+                          e.target.parentElement.id=""
+                          e.target.parentElement.style.opacity=0.5
+                        }else{
+                          e.target.parentElement.id="checked"+row.key
+                        }
+                      }
+
+                      if(e.target.childElementCount===2){
+                        if(e.target.id==="checked"+row.key){
+                          e.target.id=""
+                          e.target.style.opacity=0.5
+                        }else{
+                          e.target.id="checked"+row.key
+                        }
+                      }*/
+
+                    }}
+                    onMouseEnter={(e)=>{console.log(e)
+                      if(e.target.nodeName!=="BUTTON"){
+                        e=e.target.parentElement
+                        while(e.nodeName!=="BUTTON"){
+                          e=e.parentElement
+                        }
+                      }else{
+                        e=e.target
+                      }
+                      e.style.opacity=1
+                      /*if(e.target.childElementCount===0){
+                        e.target.parentElement.parentElement.style.opacity=1
+                      }
+
+                      if(e.target.childElementCount===1){
+                        e.target.parentElement.style.opacity=1
+                      }
+
+                      if(e.target.childElementCount===2){
+                        e.target.style.opacity=1
+                      }*/
+                    }}
+                    onMouseLeave={
+                      (e)=>{
+                        if(e.target.nodeName!=="BUTTON"){
+                        e=e.target.parentElement
+                        while(e.nodeName!=="BUTTON"){
+                          e=e.parentElement
+                        }
+                      }else{
+                        e=e.target
+                      }
+                      if(e.id===""){
+                            e.style.opacity=0.5
+                      }
+                        /*if(e.target.childElementCount===0){
+                          if(e.target.parentElement.parentElement.id===""){
+                            e.target.parentElement.parentElement.style.opacity=0.5
+                          }
+                        }
+
+                      if(e.target.childElementCount===1){
+                        if(e.target.parentElement.id===""){
+                          e.target.parentElement.style.opacity=0.5
+                        }
+                      }
+
+                      if(e.target.childElementCount===2){
+                        if(e.target.id===""){
+                          e.target.style.opacity=0.5
+                        }
+                      }*/
+
+                      }
+                    }
+                    timeout={transitionDuration}
+                    style={{
+                      transitionDelay: `${!bandLock?transitionDuration.exit:"0"}ms`,
+                      opacity: 0.5
+                    }}
+                    unmountOnExit
+                  >
+                  <Fab color="primary" aria-label="add">
+                        <CheckBox />
+                  </Fab>
+                </Zoom>
+                  
                 </TableCell>
                 <TableCell className={classes.tableCell} 
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
@@ -278,15 +449,22 @@ export default function CustomTable(props) {
                   onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}>
                   {row.ubi}
                 </TableCell>
-                <TableCell className={classes.tableCell}
+                {/*<TableCell className={classes.tableCell}
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
                   onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}>
                   {row.dateSI?row.dateSI:(<i>Sin recibo</i>)}
-                </TableCell>
+            </TableCell>*/}
                 <TableCell className={classes.tableCell}
-                  onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
-                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}>
-                  {row.dateSF?row.dateSF:(<i>Sin recibo</i>)}
+                  //onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
+                  //onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}
+                  >
+                  <><h4 className={classes.cardTitleBlack}>
+                       {row.dateSF}
+                    </h4>
+                      <Calendar c={
+                        new wrappCalendar({idCliente: row.key,  fechaSI: row.dateSI, fechaSF: row.dateSF, idVelocidad: row.idVelocidad, monto: row.montor, difDate: row.difDate, bandLock
+                      })} />
+                  </>
                 </TableCell>
                 <TableCell className={classes.tableCell}
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
@@ -300,25 +478,70 @@ export default function CustomTable(props) {
                 </TableCell>
                 <TableCell className={classes.tableCell}>
                   <GridContainer> 
-                    <Button
-                      id="regB"
-                      color="primary"
-                      style = {
-                        {
-                          display: "flex",
-                          flex: 1,
-                          alignItems: "center"
-                        }
-                      }
-                      onMouseUp={(e)=>{
-                        //genCarta(row.cta,row.NOMBRE,row.ubi,row.tp)
-                      //const wifi = new MiWifi({mac: 'f0:18:98:a8:75:f6'});
-                      //wifi.login('moraneza1992');
-                      
-                      }}
-                    >
+                    
+                    <UncontrolledDropdown style={{position: 'relative', left: 0}}>
+                      <DropdownToggle
+                          caret
+                          className="btn-icon"
+                          color="link"
+                          data-toggle="dropdown"
+                          type="button"
+                          style={{width: 110,height:90, top: -20}}
+                        >
                       {row.velocidad?row.velocidad:(<i>0 MEGAS</i>)}
-                    </Button>
+                     
+                        </DropdownToggle>
+                        {/*<DropdownToggle
+                          caret
+                          className="btn-icon"
+                          color="link"
+                          data-toggle="dropdown"
+                          type="button"
+                        >
+                          <i className="tim-icons icon-settings-gear-63" />
+                        </DropdownToggle>*/}
+                        {!bandLock &&
+                        <DropdownMenu aria-labelledby="dropdownMenuLink" left>
+                          <DropdownItem
+                            style={{cursor: 'pointer'}}
+                            onClick={e => {
+                              /*let difDate = 0
+                              let pagar = 0;
+                              const {fechaSI, fechaSF} = this.state
+                              const dateA = new Date(fechaSI);
+                              const dateB = new Date(fechaSF);
+                              //const {idVelocidad} = this.state;
+                              while(dateA<dateB){
+                                dateA.setMonth(dateA.getMonth()+1);
+                                difDate++;
+                              }*/
+                             // this.setTotal(150,0,e.target.innerHTML)
+                            
+                            }}
+                          >
+                            10 MEGAS
+                          </DropdownItem>
+                          <DropdownItem
+                           style={{cursor: 'pointer'}}
+                            onClick={e => {
+                             // this.setTotal(250,1,e.target.innerHTML)
+                            }}
+                          >
+                            20 MEGAS
+                          </DropdownItem>
+                          <DropdownItem
+                            style={{cursor: 'pointer'}}
+                            onClick={e => {
+                              //this.setTotal(300,2,e.target.innerHTML)
+                            
+                            }}
+                          >
+                            30 MEGAS
+                          </DropdownItem>
+                        </DropdownMenu>
+                        }
+                      </UncontrolledDropdown>
+                      
                   </GridContainer>
                 </TableCell>
                {/* <TableCell align="center" className={classes.tableCell}>

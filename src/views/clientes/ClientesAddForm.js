@@ -14,6 +14,7 @@ import {
   MobileView,
   isMobile
 } from "react-device-detect";
+import ip from 'variables/ip';
 import { MobilePDFReader } from "react-read-pdf";
 import Button from "components/CustomButtons/Button.js";
 import GridItem from "components/Grid/GridItem.js";
@@ -73,12 +74,14 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state={
+     idCliente: props.idCliente,
      nombre: props.nombre,
      ubi: props.ubi,
      telefono: props.telefono,
      bandSucces: false,
      setMsg: props.setMsg,
-     setColor: props.setColor
+     setColor: props.setColor,
+     bandEdit: props.bandEdit
     }
     
   }
@@ -98,6 +101,89 @@ class App extends React.Component {
       e.target.setSelectionRange(this.selectionStartNombre, this.selectionEndNombre);
     }else if(e.which===13){
       this.handdleUp()
+    }
+  }
+  allClientes=async(cliente)=>{
+    try {
+
+       //const sendUri = "http://34.66.54.10:3015/";
+       //const GenExpHTML = GenExpHTML
+       const sendUri = `${ip("2000")}clientes/get`;
+       // const sendUri = "http://localhost:3015/";
+        //const sendUri = "http://192.168.1.74:3015/";
+       const bodyJSON = {
+         cliente: cliente,
+         tipoB: 0
+       }
+        const response = await fetch(sendUri, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(bodyJSON)
+        });
+
+        const responseJson = await response.json().then(r => {
+              console.log(`Response1:`)
+              console.log(r)
+            let data = [];
+            if (r.clientes) {
+             r.clientes.forEach(e => {
+                //setNombre(e.cliente);
+                //setTelefono(e.telefono);
+               //setUbi(e.ubi);
+               const nombre = document.getElementById("nombre");
+               const telefono = document.getElementById("telefono");
+               const ubi = document.getElementById("ubi");
+               nombre.value=e.cliente;
+               telefono.value=e.telefono;
+               ubi.value=e.ubi;
+               this.setState({nombre: e.cliente,telefono: e.telefono, ubi: e.ubi});
+                /*data.push({
+                  key: e.idCliente,
+                  cliente: e.cliente,
+                  telefono: e.telefono,
+                  ubi: e.ubi,
+                  fechaPago: null,
+                  fechaDePago:  e.ultimoRecibo?e.ultimoRecibo.fechaPago:e.ultimoRecibo,
+                  monto: null,
+                  montor: e.ultimoRecibo?e.ultimoRecibo.monto:e.ultimoRecibo,
+                  idVelocidad: e.ultimoRecibo?e.ultimoRecibo.idVelocidad:e.ultimoRecibo,
+                  velocidad: e.ultimoRecibo?e.ultimoRecibo.velocidad:e.ultimoRecibo,
+                  expiro: e.expiro,
+                  refRow: React.createRef(),
+                  dateSI:  e.ultimoRecibo?e.ultimoRecibo.dateI:e.ultimoRecibo,
+                  dateSF:  e.ultimoRecibo?e.ultimoRecibo.dateF:e.ultimoRecibo,
+                  difDate:  e.ultimoRecibo?e.ultimoRecibo.difDate:e.ultimoRecibo,
+                  idRecibo:  e.ultimoRecibo?e.ultimoRecibo.idRecibo:e.ultimoRecibo,
+                  
+                });
+                console.log(data) 
+                if(e.expiro){
+                  this.expiro=1;
+                  data[data.length-1].fechaPago=<div  >
+                  <GenExpHTML c={this} refRow={data[data.length-1].refRow}  /> 
+                  <i style={{color: 'red'}} >{data[data.length-1].fechaDePago}</i>
+                  </div>
+                  data[data.length-1].monto=<><i style={{color: 'red'}} >{data[data.length-1].montor}</i></>
+                //  data[data.length-1].velocidad=<i style={{color: 'red'}} >{data[data.length-1].velocidad}</i>
+                }*/
+
+             })
+
+            }
+            
+        });
+    } catch (e) {
+        console.log(`Error: ${e}`);
+    }
+}
+
+  componentDidMount(){
+    const {bandEdit,idCliente} = this.state
+    if(bandEdit){
+      this.allClientes(idCliente);
     }
   }
   render() {
@@ -122,6 +208,7 @@ class App extends React.Component {
                         }}
                         inputProps={{
                           type: "text",
+                          //value: nombre,
                           defaultValue: nombre,
                           //onBlur: this.handdleU
                           onKeyUp: this.handleUpper,

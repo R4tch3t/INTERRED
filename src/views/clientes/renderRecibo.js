@@ -384,66 +384,69 @@ setTotal=(t,idV,v)=>{
                     </GridItem>
                     <GridItem xs={12} sm={12} md={3}>
                     <UncontrolledDropdown style={{position: 'relative', left: 0}}>
-                  <DropdownToggle
-                      caret
-                      className="btn-icon"
-                      color="link"
-                      data-toggle="dropdown"
-                      type="button"
-                      style={{width: 90}}
-                    >
-                    VELOCIDAD: 
-                    </DropdownToggle>
-                    <DropdownToggle
-                      caret
-                      className="btn-icon"
-                      color="link"
-                      data-toggle="dropdown"
-                      type="button"
-                    >
-                      <i className="tim-icons icon-settings-gear-63" />
-                    </DropdownToggle>
-                    <DropdownMenu aria-labelledby="dropdownMenuLink" left>
-                      <DropdownItem
-                        href="#pablo"
-                        onClick={e => {
-                          /*let difDate = 0
-                          let pagar = 0;
-                          const {fechaSI, fechaSF} = this.state
-                          const dateA = new Date(fechaSI);
-                          const dateB = new Date(fechaSF);
-                          //const {idVelocidad} = this.state;
-                          while(dateA<dateB){
-                            dateA.setMonth(dateA.getMonth()+1);
-                            difDate++;
-                          }*/
-                          this.setTotal(150,0,e.target.innerHTML)
-                        
-                        }}
-                      >
-                        10 MEGAS
-                      </DropdownItem>
-                      <DropdownItem
-                        href="#pablo"
-                        onClick={e => {
-                          this.setTotal(250,1,e.target.innerHTML)
-                        }}
-                      >
-                        20 MEGAS
-                      </DropdownItem>
-                      <DropdownItem
-                        href="#pablo"
-                        onClick={e => {
-                          this.setTotal(300,2,e.target.innerHTML)
-                        
-                        }}
-                      >
-                        30 MEGAS
-                      </DropdownItem>
-                    </DropdownMenu>
-                    <div style={{height: 7}} />
-                    {velocidad!=="undefined"?velocidad:"10 MEGAS"}
-                  </UncontrolledDropdown>
+                      <DropdownToggle
+                          caret
+                          className="btn-icon"
+                          color="link"
+                          data-toggle="dropdown"
+                          type="button"
+                          style={{width: 90}}
+                        >
+                        VELOCIDAD: 
+                        </DropdownToggle>
+                        <DropdownToggle
+                          caret
+                          className="btn-icon"
+                          color="link"
+                          data-toggle="dropdown"
+                          type="button"
+                        >
+                          <i className="tim-icons icon-settings-gear-63" />
+                        </DropdownToggle>
+                        <DropdownMenu aria-labelledby="dropdownMenuLink" left>
+                          <DropdownItem
+                           // href="#pablo"
+                           style={{cursor: 'pointer'}}
+                            onClick={e => {
+                              /*let difDate = 0
+                              let pagar = 0;
+                              const {fechaSI, fechaSF} = this.state
+                              const dateA = new Date(fechaSI);
+                              const dateB = new Date(fechaSF);
+                              //const {idVelocidad} = this.state;
+                              while(dateA<dateB){
+                                dateA.setMonth(dateA.getMonth()+1);
+                                difDate++;
+                              }*/
+                              this.setTotal(150,0,e.target.innerHTML)
+                            
+                            }}
+                          >
+                            10 MEGAS
+                          </DropdownItem>
+                          <DropdownItem
+                           // href="#pablo"
+                           style={{cursor: 'pointer'}}
+                            onClick={e => {
+                              this.setTotal(250,1,e.target.innerHTML)
+                            }}
+                          >
+                            20 MEGAS
+                          </DropdownItem>
+                          <DropdownItem
+                           // href="#pablo"
+                           style={{cursor: 'pointer'}}
+                            onClick={e => {
+                              this.setTotal(300,2,e.target.innerHTML)
+                            
+                            }}
+                          >
+                            30 MEGAS
+                          </DropdownItem>
+                        </DropdownMenu>
+                        <div style={{height: 7}} />
+                        {velocidad!=="undefined"?velocidad:"10 MEGAS"}
+                      </UncontrolledDropdown>
                   
                     </GridItem>
                   <GridItem xs={12} sm={12} md={3}>

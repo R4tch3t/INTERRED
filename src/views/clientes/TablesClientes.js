@@ -3,6 +3,9 @@ import Paper from "@material-ui/core/Paper";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 import MenuList from "@material-ui/core/MenuList";
 import {isMobile} from "react-device-detect"; 
+import Lock from "@material-ui/icons/Lock";
+import Settings from "@material-ui/icons/Settings";
+import {Fab} from "views/fab"
 //import Accessibility from "@material-ui/icons/Accessibility";
 //import BugReport from "@material-ui/icons/BugReport";
 //import Code from "@material-ui/icons/Code";
@@ -29,7 +32,8 @@ import ip from 'variables/ip';
 import GenExpHTML from "./GenExpHTML"
 import WN from "@material-ui/icons/Warning"
 import { Line, Bar } from "react-chartjs-2";
-
+import Switch from '@material-ui/core/Switch';
+import {Zoom} from "views/zoom"
 // reactstrap components
 import {
   Button,
@@ -50,10 +54,12 @@ import {
   Col,
   UncontrolledTooltip
 } from "reactstrap";
-import { Icon } from '@material-ui/core';
+import Remove from '@material-ui/icons/DeleteForever';
+import Edit from '@material-ui/icons/Edit';
 
 
 export default class TableRender extends React.Component {
+
 constructor(props){
     super(props);
     this.state = {
@@ -64,12 +70,19 @@ constructor(props){
         setOpenDash: null,
         labelB: 'NOMBRE',
         openExpireDash: null,
-        opExp: 0.2
+        opExp: 0.2,
+        IconLock: Lock ,
+        bandTrash: true,
     };
     
 }
+deleteStack = {};
+refSwitch=null;
+
+bandLock = true;
 tipoB = 1
 expiro = 0;
+
 handleCloseDash = () => {
  // setOpenDash(null);
  //const {setOpenDash} = this.state
@@ -95,6 +108,48 @@ round = (num, decimales = 2)=>{
   return signo * (num[0] + 'e' + (num[1] ? (+num[1] - decimales) : -decimales));
 }
 
+sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}
+
+deleteCliente = async (idCliente) => {
+  let band = true;
+  let c = 0;
+  const rC = Object.keys(this.deleteStack).map((key) => [Number(key), this.deleteStack[key]]);
+  /*while(band){
+    if(c<rC.length){
+      this.sleep(300);
+    }else{
+      band=false
+    }*/
+    try{
+      const sendUri = `${ip("2000")}clientes/deleteCliente`;
+       // const sendUri = "http://localhost:3015/";
+        //const sendUri = "http://192.168.1.74:3015/";
+       const bodyJSON = {
+         idClientes: rC,
+       }
+        const response = await fetch(sendUri, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(bodyJSON)
+        });
+
+        const responseJson = await response.json().then(r => {
+          console.log(r)
+          if(r.exito){
+
+          }
+        //  c++;
+        });
+    }catch(e){
+
+    }
+  //}
+}
 
 allClientes=async(cliente)=>{
     try {
@@ -116,7 +171,7 @@ allClientes=async(cliente)=>{
             },
             body: JSON.stringify(bodyJSON)
         });
-        console.log(bodyJSON)
+
         const responseJson = await response.json().then(r => {
               console.log(`Response1:`)
               console.log(r)
@@ -258,15 +313,17 @@ render() {
     classes,
     classesM,
     openDash,
-    labelB
+    labelB,
+    IconLock,
+    bandTrash
   } = this.state;
+  
   const headCells = [
     { id: 'idCliente', numeric: false, disablePadding: true, label: 'ID' },
     { id: 'cliente', numeric: false, disablePadding: true, label: 'Cliente' },
     { id: 'tel', numeric: false, disablePadding: false, label: 'Telefono' },
     { id: 'ubi', numeric: false, disablePadding: false, label: 'Ubicación del servicio' },
-    { id: 'fechaSI', numeric: false, disablePadding: false, label: 'Inicia' },
-    { id: 'fechaSF', numeric: false, disablePadding: false, label: 'Finalizá' }, 
+    { id: 'fechaSF', numeric: false, disablePadding: false, label: 'Próximo pago' }, 
     { id: 'fechaPago', numeric: false, disablePadding: false, label: 'Fecha de pago' },
     { id: 'montoPagar', numeric: true, disablePadding: false, label: 'Monto a pagar' },
     { id: 'velocidad', numeric: false, disablePadding: false, label: 'Velocidad' },
@@ -354,8 +411,57 @@ render() {
                         </Grow>
                       )}
                     </Poppers>
+                    <div style={{display: 'flex', flexDirection: 'row'}}>
+                   <Zoom 
+                    bandIn={true}
+                    click = {(e)=>{
+                        const bodySide = document.getElementById("switchLock");
+                        //const {mLLock} = this.state;
+                        console.log(bodySide)
+                        //window.innerWidth
+                        if(!this.bandLock){
+                          bodySide.style.marginLeft="0px";
+                          bodySide.parentElement.style.backgroundColor="red";
+                          bodySide.style.backgroundColor="white";
+                          this.setState({IconLock: Lock})
+                        }else{
+                          bodySide.style.marginLeft="55px";
+                          bodySide.parentElement.style.backgroundColor="green";
+                          bodySide.style.backgroundColor="white";
+                          this.setState({IconLock: Settings})
+                        }
+                        
+                        this.bandLock = !this.bandLock;
+                      // bodySide.style.width="calc(100% - 260px);"
+                        //bodySide.style.width=window.innerWidth-260+"px"
+                        //props.bandFadeSide[0] = true
+                        //bodySide.classList.toggle('sideIN')
+                        //document.getElementById("sideBtn").style.display='none'
+                        //bodySide.classList.toggle("unlockClientes")
+                      }}
+                    cp={<div 
+                    
+                    style={{boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)", zIndex: 9999, width: 100, height: 50, borderRadius: 30, paddingTop: 2,cursor: 'pointer',backgroundColor: 'red',}} >
+                      <div
+                      id='switchLock'
+                      ref={this.refSwitch}
+                       
+                      className="wrapperClientes"
+                      style={{display: 'flex', flex: 1,backgroundColor: 'white',  WebkitTransition:"all 0.321s ease-out", MozTransition:"all 0.321s ease-out", msTransition: "all 0.321s ease-out", transition: "all 0.321s ease-out", alignItems: 'center',justifyContent:'center', boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)", width: 45, height: 45, borderRadius: 30}} >
+                        <IconLock />
+                      </div>
+                    </div>}
+
+                    />
+                    <div style={{width: 30}} />
+                    <Fab c={this} bandIn={!this.bandLock} Icon={Edit} color='primary' handleClick={this.deleteCliente} />
+                    <div style={{width: 30}} />
+                    <Fab c={this} bandIn={!this.bandLock} Icon={Remove} color='secondary' handleClick={this.deleteCliente} />
+                    
+                    </div>
                   </div>
                   <TableClientes
+                  c={this}
                 tableHeaderColor="warning"
                 tableHead={headCells}
                 tableData={dataTable}
