@@ -26,13 +26,13 @@ export default function DateRangePickerExample(props) {
         <input
           className={'input' + (focused ? ' -focused' : '')}
           {...inputProps}
+          value={c.state.fechaPago!=="undefined"?c.state.fechaPago:(date?date:"")}
           onMouseUp={()=>{
             const fechaPagoH = document.getElementById("fechaPagoH");
             const calendar = fechaPagoH.nextElementSibling.firstChild.nextElementSibling;
-            console.log(calendar)
+            
             calendar.style.position='absolute'
             calendar.style.right=0
-        
           }}
         />
       )}

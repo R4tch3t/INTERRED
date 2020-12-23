@@ -35,7 +35,7 @@ import CustomInput from "components/CustomInput/CustomInput";
 import spellNumber from "views/Dashboard/spellNumber";
 //import Calendar from "react-calendar";
 import {Calendar} from "views/calendar"
-import {addCliente} from "./methods"
+import {addCliente, editCliente} from "./methods"
 import WN from "@material-ui/icons/Warning"
 //import spellNumber from "./spellNumber";
 //import InformeM from "./InformeM";
@@ -75,6 +75,7 @@ class App extends React.Component {
     super(props);
     this.state={
      idCliente: props.idCliente,
+     idRecibo: props.idRecibo,
      nombre: props.nombre,
      ubi: props.ubi,
      telefono: props.telefono,
@@ -102,6 +103,8 @@ class App extends React.Component {
     if(nombre&&telefono&&ubi){
       if(!bandEdit){
         addCliente(this,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago);
+      }else{
+        editCliente(this,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago);
       }
     }
   }
@@ -151,7 +154,24 @@ class App extends React.Component {
                nombre.value=e.cliente;
                telefono.value=e.telefono;
                ubi.value=e.ubi;
-               this.setState({nombre: e.cliente,telefono: e.telefono, ubi: e.ubi});
+               const idVelocidad = e.ultimoRecibo?e.ultimoRecibo.idVelocidad:e.ultimoRecibo;//e.idVelocidad;
+               let velocidad = "10 MEGAS"
+               const monto=e.ultimoRecibo?e.ultimoRecibo.monto:e.ultimoRecibo;
+               const difDate=e.ultimoRecibo?e.ultimoRecibo.difDate:e.ultimoRecibo;
+               const fechaPago=e.ultimoRecibo?e.ultimoRecibo.fechaPago:e.ultimoRecibo;
+               const fechaSI=e.ultimoRecibo?e.ultimoRecibo.dateI:e.ultimoRecibo;
+               const fechaSF=e.ultimoRecibo?e.ultimoRecibo.dateF:e.ultimoRecibo;
+               const idRecibo=e.ultimoRecibo?e.ultimoRecibo.idRecibo:e.ultimoRecibo;
+               switch(idVelocidad){
+                  case 1:
+                    velocidad="20 MEGAS"
+                    break;
+                  case 2:
+                    velocidad="30 MEGAS"
+                    break;
+                  default:break;
+               }
+               this.setState({nombre: e.cliente,telefono: e.telefono, ubi: e.ubi, idVelocidad, velocidad, monto, difDate, fechaPago,fechaSI,fechaSF,idRecibo});
                 /*data.push({
                   key: e.idCliente,
                   cliente: e.cliente,
