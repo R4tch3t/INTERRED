@@ -1,15 +1,44 @@
 import React, { useState } from 'react'
 import { es } from 'date-fns/locale'
-import { DateRangePicker, START_DATE, END_DATE } from 'react-nice-dates'
+import { DateRangePicker, START_DATE, END_DATE, DatePicker } from 'react-nice-dates'
 import 'react-nice-dates/build/style.css'
 export default function DateRangePickerExample(props) {
-  const {c} = props
+  const {c,bandRange} = props
   const [startDate, setStartDate] = useState()
   const [endDate, setEndDate] = useState()
+  const [date, setDate] = useState();
   c.dateSI=startDate
   c.dateSF=endDate
 
   console.log(startDate)
+  if(bandRange)
+  return(
+    <DatePicker
+      date={date} onDateChange={(date)=>{
+        c.setState({fechaPago: date});
+        setDate(date);
+        
+      }}
+      format='dd MMM yyyy'
+      locale={es}
+    >
+      {({ inputProps, focused }) => (
+        <input
+          className={'input' + (focused ? ' -focused' : '')}
+          {...inputProps}
+          onMouseUp={()=>{
+            const fechaPagoH = document.getElementById("fechaPagoH");
+            const calendar = fechaPagoH.nextElementSibling.firstChild.nextElementSibling;
+            console.log(calendar)
+            calendar.style.position='absolute'
+            calendar.style.right=0
+        
+          }}
+        />
+      )}
+    </DatePicker>
+  )
+  else
   return (
     <DateRangePicker
       startDate={startDate}

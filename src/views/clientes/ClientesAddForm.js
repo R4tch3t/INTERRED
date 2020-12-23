@@ -78,19 +78,31 @@ class App extends React.Component {
      nombre: props.nombre,
      ubi: props.ubi,
      telefono: props.telefono,
+     velocidad: "10 MEGAS",
+     idVelocidad: 0,
+     monto: 0,
+     difDate: 0,
      bandSucces: false,
      setMsg: props.setMsg,
      setColor: props.setColor,
-     bandEdit: props.bandEdit
+     bandEdit: props.bandEdit,
+     fechaSI: props.fechaSI,
+     fechaSF: props.fechaSF,
+     fechaPago: props.fechaPago
     }
     
   }
+
   handdleUp=()=>{
     const nombre = document.getElementById("nombre").value;
     const ubi = document.getElementById("ubi").value;
     const telefono = document.getElementById("telefono").value;
+    const {idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago} = this.state;
+    const {bandEdit,idCliente} = this.state
     if(nombre&&telefono&&ubi){
-      addCliente(this,nombre,telefono,ubi);
+      if(!bandEdit){
+        addCliente(this,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago);
+      }
     }
   }
   handleUpper = e => {
@@ -179,16 +191,29 @@ class App extends React.Component {
         console.log(`Error: ${e}`);
     }
 }
-
-  componentDidMount(){
-    const {bandEdit,idCliente} = this.state
-    if(bandEdit){
-      this.allClientes(idCliente);
-    }
+setTotal=(t,idV,v)=>{
+    let {difDate} = this.state
+    difDate = difDate==="undefined"?1:difDate
+    console.log(`difDate: ${difDate}`)
+    const monto = t * difDate
+      
+    
+    console.log(monto)
+    //c.setState({pagar})
+    //console.log(difDate)
+    this.setState({idVelocidad: idV,velocidad: v,monto})
+}
+componentDidMount(){
+  const {bandEdit,idCliente} = this.state
+  if(bandEdit){
+    this.allClientes(idCliente);
   }
+}
+
   render() {
     const {classes} = this.props
-    const {nombre,telefono, ubi,bandSucces} = this.state
+    const {nombre,telefono, ubi,bandSucces,bandEdit,velocidad,monto} = this.state
+    const labelB = bandEdit?"ACTUALIZAR CLIENTE":"REGISTRAR CLIENTE";
     return (
       <CardIcon>
         <GridContainer>
@@ -249,7 +274,110 @@ class App extends React.Component {
                         }}
                       />
                     </GridItem>
+                    <GridItem xs={12} sm={12} md={3}>
+                    <UncontrolledDropdown style={{position: 'relative', left: 0}}>
+                      <DropdownToggle
+                          caret
+                          className="btn-icon"
+                          color="link"
+                          data-toggle="dropdown"
+                          type="button"
+                          style={{width: 90}}
+                        >
+                        VELOCIDAD: 
+                        </DropdownToggle>
+                        <DropdownToggle
+                          caret
+                          className="btn-icon"
+                          color="link"
+                          data-toggle="dropdown"
+                          type="button"
+                        >
+                          <i className="tim-icons icon-settings-gear-63" />
+                        </DropdownToggle>
+                        <DropdownMenu aria-labelledby="dropdownMenuLink" left>
+                          <DropdownItem
+                           // href="#pablo"
+                           style={{cursor: 'pointer'}}
+                            onClick={e => {
+                              /*let difDate = 0
+                              let pagar = 0;
+                              const {fechaSI, fechaSF} = this.state
+                              const dateA = new Date(fechaSI);
+                              const dateB = new Date(fechaSF);
+                              //const {idVelocidad} = this.state;
+                              while(dateA<dateB){
+                                dateA.setMonth(dateA.getMonth()+1);
+                                difDate++;
+                              }*/
+                              this.setTotal(150,0,e.target.innerHTML)
+                            
+                            }}
+                          >
+                            10 MEGAS
+                          </DropdownItem>
+                          <DropdownItem
+                           // href="#pablo"
+                           style={{cursor: 'pointer'}}
+                            onClick={e => {
+                              this.setTotal(250,1,e.target.innerHTML)
+                            }}
+                          >
+                            20 MEGAS
+                          </DropdownItem>
+                          <DropdownItem
+                           // href="#pablo"
+                           style={{cursor: 'pointer'}}
+                            onClick={e => {
+                              this.setTotal(300,2,e.target.innerHTML)
+                            
+                            }}
+                          >
+                            30 MEGAS
+                          </DropdownItem>
+                        </DropdownMenu>
+                        <div style={{height: 7}} />
+                        {velocidad}
+                      </UncontrolledDropdown>
+                  
+                    </GridItem>
                     </GridContainer>
+                    <GridContainer>
+                    <GridItem xs={12} sm={12} md={5}>
+                      <h4 className={classes.cardTitleBlack}>
+                        PERIODO DE SUBSCRIPCIÓN:
+                      </h4>
+                      
+                       <Calendar c={this} />
+                      
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={3}>
+                      <CustomInput
+                        labelText="A PAGAR:"
+                        id="pagar"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          type: "number",
+                          //defaultValue: parseInt(pagar)===0?monto:pagar,
+                          value: monto!=="undefined"?monto:150
+                          //onBlur: this.handdleU
+                          //onKeyUp: this.handleUpper,
+                          //onMouseUp: this.handdleU
+                        }}
+                      />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={4}>
+                      <h4 id="fechaPagoH" className={classes.cardTitleBlack}>
+                        FECHA DE PAGO:
+                      </h4>
+                      
+                       <Calendar c={this} bandRange={true} />
+                      
+                    </GridItem>
+                    </GridContainer>
+                    <div style={{height: 400}} ></div>
                     <GridContainer>
                     <Button id='btnAddC' color="success" 
                       style={{
@@ -260,9 +388,10 @@ class App extends React.Component {
                       onClick={this.handdleUp}
                       disabled={bandSucces}
                       >
-                        REGISTRAR CLIENTE
+                        {labelB}
                       </Button>
                   </GridContainer>
+                  
                     </React.Fragment>
               </CardBody>
             </Card>

@@ -462,7 +462,7 @@ export default function CustomTable(props) {
                        {row.dateSF}
                     </h4>
                       <Calendar c={
-                        new wrappCalendar({idCliente: row.key,  fechaSI: row.dateSI, fechaSF: row.dateSF, idVelocidad: row.idVelocidad, monto: row.montor, difDate: row.difDate, bandLock
+                        new wrappCalendar({idCliente: row.key,  dateSI: row.dateSI, dateSF: row.dateSF, idVelocidad: row.idVelocidad, monto: row.montor, difDate: row.difDate, bandLock
                       })} />
                   </>
                 </TableCell>

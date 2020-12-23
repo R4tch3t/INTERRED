@@ -232,6 +232,17 @@ allClientes=async(cliente)=>{
     }
 }
 
+editClientes = () => {
+  Object.keys(this.deleteStack).map((key) => {
+    //[Number(key), this.deleteStack[key]]
+    const idRol = "1";
+    const url = idRol === '1' ? `/admin/editarCliente/${key}` : `/usuario/editarCliente/${key}`;
+    //const url = `/admin/editarCliente/${key}`;
+    const win = window.open(url, '_blank');
+    win.focus();
+  });
+}
+
 getParameterByName=(name, url) => {
   if (!url) url = window.location.href;
   name = name.replace(/[\[\]]/g, '\\$&');
@@ -454,7 +465,7 @@ render() {
 
                     />
                     <div style={{width: 30}} />
-                    <Fab c={this} bandIn={!this.bandLock} Icon={Edit} color='primary' handleClick={this.deleteCliente} />
+                    <Fab c={this} bandIn={!this.bandLock} Icon={Edit} color='primary' handleClick={this.editClientes} />
                     <div style={{width: 30}} />
                     <Fab c={this} bandIn={!this.bandLock} Icon={Remove} color='secondary' handleClick={this.deleteCliente} />
                     

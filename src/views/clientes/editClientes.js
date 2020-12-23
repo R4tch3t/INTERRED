@@ -70,7 +70,7 @@ export default () => {
   console.log(idCliente);
   //urlDec = decrypt(urlDec);
   
-  const [state, setState] = React.useState({bigChartData: 'data2'});
+  const [state, setState] = React.useState({bigChartData: 'data3'});
   const setBgChartData = name => {
     /*this.setState({
       bigChartData: name
@@ -139,7 +139,10 @@ export default () => {
                           className={classNames("btn-simple", {
                             active: state.bigChartData === "data2"
                           })}
-                          onClick={() => setBgChartData("data2")}
+                          onClick={() => {
+                            window.history.pushState(null,'Administrador','/admin/agregarCliente')
+                            window.history.go()
+                          }}
                         >
                           <input
                           defaultChecked
@@ -170,7 +173,7 @@ export default () => {
                             type="radio"
                           />
                           <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                            Sessions
+                            Editar Cliente
                           </span>
                           <span className="d-block d-sm-none">
                             <i className="tim-icons icon-tap-02" />
@@ -182,7 +185,7 @@ export default () => {
                 </CardHeader>
                 <CardBody>
                   <div >
-                    <ClientesAddForm setMsg={setMsg} setColor={setColor} idCliente={idCliente} nombre={" "}
+                    <ClientesAddForm classes={classes} classesM={classesM} setMsg={setMsg} setColor={setColor} idCliente={idCliente} nombre={" "}
                     telefono={" "} ubi={" "}
                     bandEdit={true} />                 
                     {/*<Line

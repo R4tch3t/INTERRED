@@ -1,11 +1,11 @@
 import ip from "variables/ip"
-export default async (c,nombre,telefono,ubi) => {
+export default async (c,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago) => {
     try{
         c.setState({bandSucces: true});
-    const {setMsg,setColor} = c.state
+    const {setMsg, setColor} = c.state
     const sendUri = `${ip("2000")}clientes/addCliente`;
     const bodyJSON = {
-          nombre,telefono,ubi
+          nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago
     }
     const response = await fetch(sendUri, {
         method: "POST",

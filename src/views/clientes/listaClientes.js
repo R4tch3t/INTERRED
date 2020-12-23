@@ -198,7 +198,10 @@ export default () => {
                           className={classNames("btn-simple", {
                             active: state.bigChartData === "data3"
                           })}
-                          onClick={() => setBgChartData("data3")}
+                          onClick={() => {
+                            window.history.pushState(null,'Administrador','/admin/editarCliente')
+                            window.history.go()
+                          }}
                         >
                           <input
                             className="d-none"
@@ -206,7 +209,7 @@ export default () => {
                             type="radio"
                           />
                           <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                            Sessions
+                            Editar Cliente
                           </span>
                           <span className="d-block d-sm-none">
                             <i className="tim-icons icon-tap-02" />

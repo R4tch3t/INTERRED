@@ -471,7 +471,7 @@ setTotal=(t,idV,v)=>{
                   <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       <h4 className={classes.cardTitleBlack}>
-                        PERIODO DE PAGO:
+                        PERIODO DE SUBSCRIPCIÓN:
                       </h4>
                       <Calendar c={this} />
                     </GridItem>
