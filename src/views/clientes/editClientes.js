@@ -50,7 +50,7 @@ function getId(url=window.location.href) {
   //if (!url) url = window.location.href;
   console.log(url)
   const a = url.split("/");
-  return a[a.length-1]
+  return a[a.length-1];
 }
 
 export default () => {

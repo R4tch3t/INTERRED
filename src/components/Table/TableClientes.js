@@ -19,6 +19,7 @@ import styles from "assets/jss/material-dashboard-react/components/tableStyle.js
 import encrypt from "views/Dashboard/encrypt";
 import GridContainer from "components/Grid/GridContainer";
 import {Calendar} from "views/calendar"
+import {editCliente} from "views/clientes/methods"
 import {
   DropdownToggle,
   DropdownMenu,
@@ -187,9 +188,9 @@ function EnhancedTableHead(props) {
 const genCTA = (idCliente, nombre, ubi, fecha, monto, velocidad, idVelocidad, dateSI, dateSF, difDate, expiro, idRecibo) => {
   //const idRol = cookie.load('idRol')
   const idRol = "1";
-  let url = idRol === '1' ? `/admin/listaClientes` : `/usuario/listaClientes`
+  let url = idRol === '1' ? `/admin/listaClientes` : `/usuario/listaClientes` 
   let subUrl = `?bandCTA=1&idCliente=${idCliente}&nombre=${nombre}&ubi=${ubi}&fecha=${fecha}&dateSI=${dateSI}&dateSF=${dateSF}&monto=${monto}&idVelocidad=${idVelocidad}&velocidad=${velocidad}&difDate=${difDate}&expiro=${expiro}&pagar=0&idRecibo=${idRecibo}`
-  console.log(subUrl)
+  //console.log(subUrl)
   url += `?v=${encrypt(subUrl)}`;
   //window.history.pushState(null,'Administrador','#/admin/creditos')
     //       window.history.go()
@@ -224,23 +225,33 @@ class wrappCalendar {
     this.dateSF.setHours(0,0,0,0);
     const d = new Date();
     this.state={
+      idCliente: props.idCliente,
+      idRecibo: props.idRecibo,
+      nombre: props.nombre,
+      telefono: props.telefono,
+      ubi: props.ubi, 
       fechaSI: props.dateSI,
       fechaSF: props.dateSF,
+      fechaPago: props.fechaPago,
       monto: props.monto, 
       difDate: props.difDate,
       idVelocidad: props.idVelocidad,
+      velocidad: props.velocidad,
       bandLock: props.bandLock
     }
     
   }
   _setState=(v)=>{
     const {fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock} = v
+    const {nombre, telefono, ubi, fechaPago} = this.state;
+    editCliente(this,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago, true);
     this.state.fechaSI = fechaSI;
     this.state.fechaSF = fechaSF;
     this.state.monto = monto;
     this.state.difDate = difDate;
     this.state.idVelocidad = idVelocidad;
     this.state.bandLock = bandLock;
+
     //this.setState({fechaSI, fechaSF, monto, difDate, idVelocidad});
   }
 }
@@ -253,6 +264,7 @@ export default function CustomTable(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('ID');
+
   const rows = tableData;
   const {bandLock} = props.c
   const handleChangePage = (event, newPage) => {
@@ -274,6 +286,9 @@ export default function CustomTable(props) {
     setOrder(isDesc ? 'asc' : 'desc');
     setOrderBy(property);
   };
+  
+  //let wrapC = null
+
   try{
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
   return (
@@ -295,12 +310,17 @@ export default function CustomTable(props) {
           { 
             stableSort(rows, getSorting(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-              console.log(row)
+              //console.log(row)
               try{
+                const wrapC = new wrappCalendar({idCliente: row.key,idRecibo: row.idRecibo, nombre: row.cliente, telefono: row.telefono, ubi: row.ubi,  
+                                          dateSI: row.dateSI, dateSF: row.dateSF, fechaPago: row.fechaDePago, idVelocidad: row.idVelocidad, monto: row.montor, difDate: row.difDate, bandLock
+                                          ,velocidad: row.velocidad      });
+               // const [idVelocidad, setIdVelocidad] = React.useState(row.idVelocidad);
+               // const [velocidad, setVelocidad] = React.useState(row.velocidad);
             return (
               <TableRow key={row.key}  
               onMouseEnter={()=>{
-                                            console.log(row.refRow)
+                                      //      console.log(row.refRow)
                                             if(row.refRow&&row.refRow.current){
                                                 row.refRow.current.style.opacity = 1;
                                             }
@@ -329,7 +349,7 @@ export default function CustomTable(props) {
                     //key={fab.color}
                     in={!bandLock}
                     onClick={(e)=>{
-                    console.log(e)
+                  //  console.log(e)
                     c.deleteStack[row.key]=row.key
                     if(e.target.nodeName!=="BUTTON"){
                       e=e.target.parentElement
@@ -366,7 +386,7 @@ export default function CustomTable(props) {
                       }*/
 
                     }}
-                    onMouseEnter={(e)=>{console.log(e)
+                    onMouseEnter={(e)=>{//console.log(e)
                       if(e.target.nodeName!=="BUTTON"){
                         e=e.target.parentElement
                         while(e.nodeName!=="BUTTON"){
@@ -458,23 +478,38 @@ export default function CustomTable(props) {
                   //onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
                   //onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}
                   >
-                  <><h4 className={classes.cardTitleBlack}>
+                  <><h4 className={classes.cardTitleBlack} style={{color: 'red'}}>
                        {row.dateSF}
                     </h4>
-                      <Calendar c={
-                        new wrappCalendar({idCliente: row.key,  dateSI: row.dateSI, dateSF: row.dateSF, idVelocidad: row.idVelocidad, monto: row.montor, difDate: row.difDate, bandLock
-                      })} />
+                      <Calendar c={wrapC} /*c={()=>{
+                                   wrapC = new wrappCalendar({idCliente: row.key,idRecibo: row.idRecibo, nombre: row.cliente, telefono: row.telefono, ubi: row.ubi,  
+                                          dateSI: row.dateSI, dateSF: row.dateSF, fechaPago: row.fechaDePago, idVelocidad: row.idVelocidad, monto: row.montor, difDate: row.difDate, bandLock
+                                  });
+
+                                  return wrapC
+                                }}*/ 
+                         />
                   </>
                 </TableCell>
                 <TableCell className={classes.tableCell}
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
-                  onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}>
-                  {row.fechaPago?row.fechaPago:(row.fechaDePago?row.fechaDePago:(<i>Sin recibo</i>))}
+                  //onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}
+                >
+                  {
+                    //row.fechaPago?row.fechaPago:(row.fechaDePago?row.fechaDePago:(<i>Sin recibo</i>))
+                  }
+                  <h4 id="fechaPagoH" className={classes.cardTitleBlack} style={{color: (row.fechaDePago?'green':'red') }}>
+                        {row.fechaPago?row.fechaPago:(row.fechaDePago?row.fechaDePago:(<i>Sin recibo</i>))}
+                  </h4>
+                      
+                       <Calendar c={wrapC} bandRange={true} />
                 </TableCell>
                 <TableCell className={classes.tableCell}
                   onMouseEnter={(e)=>{e.target.style.cursor='pointer'}}
                   onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}>
-                  {row.monto?row.monto:(row.montor?row.montor:(<i>Sin recibo</i>))}
+                  <div id={`row.monto[${row.key}]`}  >
+                    {row.monto?row.monto:(row.montor?row.montor:(<i>Sin recibo</i>))}
+                  </div>
                 </TableCell>
                 <TableCell className={classes.tableCell}>
                   <GridContainer> 
@@ -488,8 +523,9 @@ export default function CustomTable(props) {
                           type="button"
                           style={{width: 110,height:90, top: -20}}
                         >
-                      {row.velocidad?row.velocidad:(<i>0 MEGAS</i>)}
-                     
+                      <div id={`row.velocidad[${row.key}]`}  >    
+                        {row.velocidad?row.velocidad:(<i>0 MEGAS</i>)}
+                      </div>
                         </DropdownToggle>
                         {/*<DropdownToggle
                           caret
@@ -505,6 +541,17 @@ export default function CustomTable(props) {
                           <DropdownItem
                             style={{cursor: 'pointer'}}
                             onClick={e => {
+                              wrapC.state.idVelocidad=0;
+                              wrapC.state.monto=150*wrapC.state.difDate;
+                              document.getElementById(`row.velocidad[${row.key}]`).innerHTML="10 MEGAS";
+                              document.getElementById(`row.monto[${row.key}]`).innerHTML=wrapC.state.monto;
+                              const {fechaSI , fechaSF, monto, difDate, idVelocidad, bandLock} = wrapC.state
+                              const v = {fechaSI , fechaSF, monto, difDate, idVelocidad, bandLock}
+                              wrapC._setState(v);
+                              //row.velocidad="10 MEGAS"
+                              //setVelocidad("10 MEGAS")
+                              //wrapC.state.velocidad='10 MEGAS';
+                             // setPage(page);
                               /*let difDate = 0
                               let pagar = 0;
                               const {fechaSI, fechaSF} = this.state
@@ -525,6 +572,13 @@ export default function CustomTable(props) {
                            style={{cursor: 'pointer'}}
                             onClick={e => {
                              // this.setTotal(250,1,e.target.innerHTML)
+                             wrapC.state.idVelocidad=1;
+                             wrapC.state.monto=250*wrapC.state.difDate;
+                              document.getElementById(`row.velocidad[${row.key}]`).innerHTML="20 MEGAS";
+                              document.getElementById(`row.monto[${row.key}]`).innerHTML=wrapC.state.monto;
+                              const {fechaSI , fechaSF, monto, difDate, idVelocidad, bandLock} = wrapC.state
+                              const v = {fechaSI , fechaSF, monto, difDate, idVelocidad, bandLock}
+                              wrapC._setState(v);
                             }}
                           >
                             20 MEGAS
@@ -533,6 +587,13 @@ export default function CustomTable(props) {
                             style={{cursor: 'pointer'}}
                             onClick={e => {
                               //this.setTotal(300,2,e.target.innerHTML)
+                              wrapC.state.idVelocidad=2;
+                              wrapC.state.monto=300*wrapC.state.difDate;
+                              document.getElementById(`row.velocidad[${row.key}]`).innerHTML="30 MEGAS";
+                              document.getElementById(`row.monto[${row.key}]`).innerHTML=wrapC.state.monto;
+                              const {fechaSI , fechaSF, monto, difDate, idVelocidad, bandLock} = wrapC.state
+                              const v = {fechaSI , fechaSF, monto, difDate, idVelocidad, bandLock}
+                              wrapC._setState(v);
                             
                             }}
                           >

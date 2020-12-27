@@ -1,8 +1,10 @@
 import ip from "variables/ip"
-export default async (c,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago) => {
+export default async (c,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago, bandTable) => {
     try{
         const {idCliente, idRecibo} = c.state;
-        c.setState({bandSucces: true});
+        if(!bandTable){
+            c.setState({bandSucces: true});
+        }
 
         const {setMsg, setColor} = c.state
         const sendUri = `${ip("2000")}clientes/editCliente`;
@@ -20,11 +22,13 @@ export default async (c,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI
    
         const responseJson = await response.json().then(r => {
             //alert(r.exito)
-            setMsg("")
-            setMsg("El Cliente se actualizó con éxito...")
-            setColor("success")
-            if(r.exito){
-                c.setState({bandSucces: false});
+            if(!bandTable){
+                if(r.exito){
+                    setMsg("")
+                    setMsg("El Cliente se actualizó con éxito...")
+                    setColor("success")
+                    c.setState({bandSucces: false});
+                }
             }
         });
     }catch(e){

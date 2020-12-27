@@ -10,12 +10,19 @@ export default function DateRangePickerExample(props) {
   c.dateSI=startDate
   c.dateSF=endDate
 
-  console.log(startDate)
+  //console.log(startDate)
   if(bandRange)
   return(
     <DatePicker
       date={date} onDateChange={(date)=>{
-        c.setState({fechaPago: date});
+        
+        if(c.bandWrappCalendar){
+          const {fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock} = c.state
+          c.state.fechaPago=date;          
+          c._setState({fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock});
+        }else{
+          c.setState({fechaPago: date});
+        }
         setDate(date);
         
       }}
@@ -34,6 +41,7 @@ export default function DateRangePickerExample(props) {
             calendar.style.position='absolute'
             calendar.style.right=0
           }}
+          disabled={c.state.bandLock}
         />
       )}
     </DatePicker>
@@ -59,32 +67,44 @@ export default function DateRangePickerExample(props) {
         let pagar = 0;
         const dateA = new Date(startDate);
         const dateB = new Date(date);
-        const {idVelocidad} = c.state;
+        const {idCliente,idVelocidad} = c.state;
+        let vel = "";
         while(dateA<dateB){
           dateA.setMonth(dateA.getMonth()+1);
           difDate++;
         }
-        console.log(`idVelocidad: ${idVelocidad}`)
+     //   console.log(`idVelocidad: ${idVelocidad}`)
         switch(idVelocidad){
           case 1: 
-            pagar = 250 * difDate
+            pagar = 250 * difDate;
+            vel="20 MEGAS";
           break;
           case 2: 
             pagar = 300 * difDate
+            vel="30 MEGAS";
           break;
           default:
             pagar = 150 * difDate
+            vel="10 MEGAS";
           break
         }
         const monto = pagar
         if(c.bandWrappCalendar){
-          c._setState({monto,difDate,fechaSI: startDate.toISOString(), fechaSF: date.toISOString(), bandLock: false});
+          
+          document.getElementById(`row.velocidad[${idCliente}]`).innerHTML=vel;
+          document.getElementById(`row.monto[${idCliente}]`).innerHTML=monto;
+          c.state.velocidad=vel;
+//          const { fechaSF, idVelocidad, bandLock} = v
+          const fechaSI = startDate.toISOString();
+          const fechaSF = date.toISOString();
+          const v = {fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock:false}
+          c._setState(v);
         }else{
           c.setState({monto,difDate,fechaSI: startDate.toISOString(), fechaSF: date.toISOString()});
         }
-        console.log(c.state.fechaSI)
-        console.log(c.state.fechaSF)
-        console.log(date)
+      //  console.log(c.state.fechaSI)
+       // console.log(c.state.fechaSF)
+       // console.log(date)
         setEndDate(date);
       }}
       //minimumDate={new Date()}

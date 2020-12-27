@@ -162,6 +162,7 @@ class App extends React.Component {
                const fechaSI=e.ultimoRecibo?e.ultimoRecibo.dateI:e.ultimoRecibo;
                const fechaSF=e.ultimoRecibo?e.ultimoRecibo.dateF:e.ultimoRecibo;
                const idRecibo=e.ultimoRecibo?e.ultimoRecibo.idRecibo:e.ultimoRecibo;
+               document.getElementById("pagar").value=monto;
                switch(idVelocidad){
                   case 1:
                     velocidad="20 MEGAS"
@@ -380,8 +381,8 @@ componentDidMount(){
                         }}
                         inputProps={{
                           type: "number",
-                          //defaultValue: parseInt(pagar)===0?monto:pagar,
-                          value: monto!=="undefined"?monto:150
+                          defaultValue: monto!=="undefined"?monto:150
+                          //value: monto!=="undefined"?monto:150
                           //onBlur: this.handdleU
                           //onKeyUp: this.handleUpper,
                           //onMouseUp: this.handdleU
