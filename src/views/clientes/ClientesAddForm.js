@@ -217,7 +217,8 @@ setTotal=(t,idV,v)=>{
     difDate = difDate==="undefined"?1:difDate
     console.log(`difDate: ${difDate}`)
     const monto = t * difDate
-      
+    const velL = document.getElementById("velocidadL");
+        velL.value=v
     
     console.log(monto)
     //c.setState({pagar})
@@ -358,7 +359,17 @@ componentDidMount(){
                           </DropdownItem>
                         </DropdownMenu>
                         <div style={{height: 7}} />
-                        {velocidad}
+                        
+                        <CustomInput
+                        labelText="VELOCIDAD:"
+                        id="velocidadL"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          type: "text"
+                        }}
+                      />
                       </UncontrolledDropdown>
                   
                     </GridItem>
