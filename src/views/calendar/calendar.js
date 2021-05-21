@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { es } from 'date-fns/locale'
 import { DateRangePicker, START_DATE, END_DATE, DatePicker } from 'react-nice-dates'
-import 'react-nice-dates/build/style.css'
+import 'react-nice-dates/build/style.css';
+
 export default function DateRangePickerExample(props) {
   const {c,bandRange} = props
   const [startDate, setStartDate] = useState()
@@ -14,18 +15,21 @@ export default function DateRangePickerExample(props) {
   if(bandRange)
   return(
     <DatePicker
-      date={date} onDateChange={(date)=>{
+      date={date} onDateChange =
+      {
+        (date)=>{
         
-        if(c.bandWrappCalendar){
-          const {fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock} = c.state
-          c.state.fechaPago=date;          
-          c._setState({fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock});
-        }else{
-          c.setState({fechaPago: date});
+          if(c.bandWrappCalendar){
+            const {fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock} = c.state
+            c.state.fechaPago=date;          
+            c._setState({fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock});
+          }else{
+            c.setState({fechaPago: date});
+          }
+          setDate(date);
+        
         }
-        setDate(date);
-        
-      }}
+    }
       format='dd MMM yyyy'
       locale={es}
     >
