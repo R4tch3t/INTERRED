@@ -212,18 +212,33 @@ class App extends React.Component {
         console.log(`Error: ${e}`);
     }
 }
-setTotal=(t,idV,v)=>{
+
+setTotal=(t,v)=>{
     let {difDate} = this.state
     difDate = difDate==="undefined"?1:difDate
     console.log(`difDate: ${difDate}`)
     const monto = t * difDate
-      
+    //const velL = document.getElementById("velocidadL");
+    //    velL.value=v
     
     console.log(monto)
     //c.setState({pagar})
     //console.log(difDate)
-    this.setState({idVelocidad: idV,velocidad: v,monto})
+    this.setState({velocidad: v,monto})
 }
+
+handleUpVel=(e)=>{
+console.log(e)
+if(e.which===13){
+  let v = document.getElementById("velocidadL").value
+  let t = v.split(" ").join('').toUpperCase();
+  t=t.split("MEGAS").join("").split('MEGA').join('');
+  t=t.split("MG").join("");
+  this.setTotal(t,v);
+}
+
+}
+
 componentDidMount(){
   const {bandEdit,idCliente} = this.state
   if(bandEdit){
@@ -296,7 +311,8 @@ componentDidMount(){
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={3}>
-                    <UncontrolledDropdown style={{position: 'relative', left: 0}}>
+                    {
+                    /*<UncontrolledDropdown style={{position: 'relative', left: 0}}>
                       <DropdownToggle
                           caret
                           className="btn-icon"
@@ -321,16 +337,7 @@ componentDidMount(){
                            // href="#pablo"
                            style={{cursor: 'pointer'}}
                             onClick={e => {
-                              /*let difDate = 0
-                              let pagar = 0;
-                              const {fechaSI, fechaSF} = this.state
-                              const dateA = new Date(fechaSI);
-                              const dateB = new Date(fechaSF);
-                              //const {idVelocidad} = this.state;
-                              while(dateA<dateB){
-                                dateA.setMonth(dateA.getMonth()+1);
-                                difDate++;
-                              }*/
+                              
                               this.setTotal(150,0,e.target.innerHTML)
                             
                             }}
@@ -358,9 +365,31 @@ componentDidMount(){
                           </DropdownItem>
                         </DropdownMenu>
                         <div style={{height: 7}} />
-                        {velocidad}
+                        
+                        <CustomInput
+                        labelText="VELOCIDAD:"
+                        id="velocidadL"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          type: "text"
+                        }}
+                      />
                       </UncontrolledDropdown>
-                  
+                      */}
+                      <CustomInput
+                        labelText="VELOCIDAD:"
+                        id="velocidadL"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        
+                        inputProps={{
+                          type: "text",
+                          onKeyUp: this.handleUpVel
+                        }}
+                      />
                     </GridItem>
                     </GridContainer>
                     <GridContainer>
