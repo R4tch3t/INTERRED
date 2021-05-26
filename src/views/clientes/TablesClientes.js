@@ -56,6 +56,7 @@ import {
 } from "reactstrap";
 import Remove from '@material-ui/icons/DeleteForever';
 import Edit from '@material-ui/icons/Edit';
+import NotificationAlert from "react-notification-alert";
 
 
 export default class TableRender extends React.Component {
@@ -73,6 +74,16 @@ constructor(props){
         opExp: 0.2,
         IconLock: Lock ,
         bandTrash: true,
+        labelW: '',
+        labelW2: '',
+        tr: false,
+        tr2: false,
+        colorSnack: 0,
+        colorSnack2: 'warning',
+        iconSnack: 0,
+        iconSnack2: WN,
+        placeSnack: 'tr',
+        placeSnack2: 'tc',
     };
     
 }
@@ -189,6 +200,7 @@ allClientes=async(cliente)=>{
                   montor: e.ultimoRecibo?e.ultimoRecibo.monto:e.ultimoRecibo,
                   idVelocidad: e.ultimoRecibo?e.ultimoRecibo.idVelocidad:e.ultimoRecibo,
                   velocidad: e.ultimoRecibo?e.ultimoRecibo.velocidad:e.ultimoRecibo,
+                  television: e.ultimoRecibo?e.ultimoRecibo.television:e.ultimoRecibo,
                   expiro: e.expiro,
                   refRow: React.createRef(),
                   dateSI:  e.ultimoRecibo?e.ultimoRecibo.dateI:e.ultimoRecibo,
@@ -197,7 +209,7 @@ allClientes=async(cliente)=>{
                   idRecibo:  e.ultimoRecibo?e.ultimoRecibo.idRecibo:e.ultimoRecibo,
                   
                 });
-                console.log(data) 
+                //console.log(data) 
                 if(e.expiro){
                   this.expiro=1;
                   data[data.length-1].fechaPago=<div  >
@@ -313,6 +325,117 @@ buscarCTA = (key) => (event) => {
  // }
 }
 
+showNotification = (place,labelW,CTA) => {
+  //const {tr,tr2} = this.state
+  let timeO = 6000;
+
+  switch (place) {
+      case "tr":
+        //this.setState({placeSnack:'tr',colorSnack: 2, iconSnack: 0,bandNotify:true});
+        this.notify(labelW,'tl',2,0,CTA);
+      break;
+      case "trE":
+        //this.setState({placeSnack:'tr',colorSnack: 'danger', iconSnack: Error,labelW});
+        this.notify(labelW,'tl',6,0,CTA);
+      break;
+      case "trA":
+        //this.setState({placeSnack:'tr',colorSnack: 'success', iconSnack: CheckCircle, labelW: 'Orden registrada con éxito'});
+      break;
+      case "trB":
+        //this.setState({placeSnack:'tr',colorSnack: 1, iconSnack: 0, labelW,bandNotify:true});
+        this.notify(labelW,'tl',1,0,CTA);
+        timeO = 256000
+        //timeO = 6001
+      //this.setState({tr: true})
+      break; 
+      case "trBO":
+        console.log(labelW)
+    //    this.setState({placeSnack:'tr',colorSnack: 1, iconSnack: 1, labelW,bandNotify:true});
+        this.notify(labelW,'tl',1,1,CTA)
+        timeO = -1
+        //timeO = 6001
+      //this.setState({tr: true})
+      break;  
+    default:
+      break;
+  }
+};
+
+notify = (label,place, color,icon,CTA) => {
+    //var color = Math.floor(Math.random() * 5 + 2);
+    //var color = 2
+    try{
+        var type;
+        let snackBand = document.getElementById("snackNoty");
+        switch (color) {
+        case 1:
+            type = "primary";
+            break;
+        case 2:
+            type = "success";
+            break;
+        case 3:
+            type = "danger";
+            break;
+        case 4:
+            type = "warning";
+            break;
+        case 5:
+            type = "info";
+            break;
+        case 6:
+            type = "dark";
+            break;
+        case 7:
+            type = "light";
+            break;        
+        default:
+            break;
+        }
+        switch (icon) {
+        case 0:
+            icon = "icon-alert-circle-exc";
+            break;
+        case 1:
+            icon = "icon-send";
+            break;
+        case 2:
+            icon = "icon-upload";
+            break;
+        case 3:
+            icon = "warning";
+            break;
+        case 4:
+            icon = "info";
+            break;
+        default:
+            break;
+        }
+        var options = {};
+        options = {
+          place: place,
+          message: (
+              <div>
+              <div id={'snackNoty'} >
+                  {label}
+              </div>
+              </div>
+          ),
+          type: type,
+          icon: "tim-icons "+icon,
+          autoDismiss: 0,
+        };
+        //this.refs.notificationAlert
+        if(!snackBand){
+          this.refs.notificationAlert.notificationAlert(options);
+        }else{
+          snackBand.innerHTML=label
+        }
+    }catch(e){
+        console.log(e)
+    }
+  };
+
 
 componentDidMount(){
   this.allClientes('')
@@ -335,14 +458,18 @@ render() {
     { id: 'tel', numeric: false, disablePadding: false, label: 'Telefono' },
     { id: 'ubi', numeric: false, disablePadding: false, label: 'Ubicación del servicio' },
     { id: 'fechaSF', numeric: false, disablePadding: false, label: 'Próximo pago' }, 
-    { id: 'fechaPago', numeric: false, disablePadding: false, label: 'Fecha de pago' },
+    { id: 'fechaPago', numeric: false, disablePadding: false, label: 'Último pago' },
     { id: 'montoPagar', numeric: true, disablePadding: false, label: 'Monto a pagar' },
     { id: 'velocidad', numeric: false, disablePadding: false, label: 'Velocidad' },
+    { id: 'television', numeric: false, disablePadding: false, label: 'Televisión' },
    // { id: 'construccion', numeric: true, disablePadding: false, label: 'Construccion' },
   ]
   return (
    <>
-        <div className="content">
+    <div className="content">
+    <div style={{zIndex: 99999}} className="react-notification-alert-container">
+      <NotificationAlert ref="notificationAlert" />
+    </div>
    <Row>
             <Col xs="12">
               <Card>

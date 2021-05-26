@@ -20,9 +20,9 @@ export default function DateRangePickerExample(props) {
         (date)=>{
         
           if(c.bandWrappCalendar){
-            const {fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock} = c.state
+            const {fechaSI, fechaSF, monto, difDate, velocidad, television, bandLock} = c.state
             c.state.fechaPago=date;          
-            c._setState({fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock});
+            c._setState({fechaSI, fechaSF, monto, difDate, velocidad, television, bandLock});
           }else{
             c.setState({fechaPago: date});
           }
@@ -45,6 +45,7 @@ export default function DateRangePickerExample(props) {
             calendar.style.position='absolute'
             calendar.style.right=0
           }}
+          style={stylesCell.inputBox}
           disabled={c.state.bandLock}
         />
       )}
@@ -71,14 +72,14 @@ export default function DateRangePickerExample(props) {
         let pagar = 0;
         const dateA = new Date(startDate);
         const dateB = new Date(date);
-        const {idCliente,idVelocidad} = c.state;
+        const {idCliente,velocidad,television,monto} = c.state;
         let vel = "";
         while(dateA<dateB){
           dateA.setMonth(dateA.getMonth()+1);
           difDate++;
         }
      //   console.log(`idVelocidad: ${idVelocidad}`)
-        switch(idVelocidad){
+        /*switch(idVelocidad){
           case 1: 
             pagar = 250 * difDate;
             vel="20 MEGAS";
@@ -91,17 +92,18 @@ export default function DateRangePickerExample(props) {
             pagar = 150 * difDate
             vel="10 MEGAS";
           break
-        }
-        const monto = pagar
+        }*/
+        //pagar = velocidad * difDate;
+        //const monto = pagar
         if(c.bandWrappCalendar){
           
-          document.getElementById(`row.velocidad[${idCliente}]`).innerHTML=vel;
+//          document.getElementById(`row.velocidad[${idCliente}]`).innerHTML=vel;
           document.getElementById(`row.monto[${idCliente}]`).innerHTML=monto;
           c.state.velocidad=vel;
 //          const { fechaSF, idVelocidad, bandLock} = v
           const fechaSI = startDate.toISOString();
           const fechaSF = date.toISOString();
-          const v = {fechaSI, fechaSF, monto, difDate, idVelocidad, bandLock:false}
+          const v = {fechaSI, fechaSF, monto, difDate, velocidad, television, bandLock:false}
           c._setState(v);
         }else{
           c.setState({monto,difDate,fechaSI: startDate.toISOString(), fechaSF: date.toISOString()});
@@ -118,20 +120,20 @@ export default function DateRangePickerExample(props) {
     >
       {({ startDateInputProps, endDateInputProps, focus }) => (
         <div className='date-range'>
-          <input
+          {<input
             className={'input' + (focus === START_DATE ? ' -focused' : '')}
             {...startDateInputProps}
             placeholder='Fecha inicial'
-            style={{marginRight: 20}}
+            style={stylesCell.inputBoxTop}
             value={c.state.fechaSI!=="undefined"?c.state.fechaSI:(startDate?startDate:"")}
             disabled={c.state.bandLock}
-          />
+          />}
            {">"}
           <input
             className={'input' + (focus === END_DATE ? ' -focused' : '')}
             {...endDateInputProps}
             placeholder='Fecha final'
-            style={{marginLeft: 20}}
+            style={stylesCell.inputBox}
             value={c.state.fechaSF!=="undefined"?c.state.fechaSF:(endDate?endDate:"")}
             disabled={c.state.bandLock}
           />
@@ -139,4 +141,26 @@ export default function DateRangePickerExample(props) {
       )}
     </DateRangePicker>
   )
+}
+
+const stylesCell={
+  inputBox: {
+    borderRadius: 10, 
+    textAlign:'center', 
+    boxShadow: "4px 4px 2px 1px rgba(1, 1, 1, 0.2)",  
+    borderWidth: '1px 0px 0px 0px',   
+    borderColor: 'black', 
+    elevation: 2, 
+    backgroundColor: 'transparent'
+  },
+  inputBoxTop: {
+    marginBottom: 10,
+    borderRadius: 10, 
+    textAlign:'center', 
+    boxShadow: "4px 4px 2px 1px rgba(1, 1, 1, 0.2)",  
+    borderWidth: '1px 0px 0px 0px',   
+    borderColor: 'black', 
+    elevation: 2, 
+    backgroundColor: 'transparent'
+  }
 }

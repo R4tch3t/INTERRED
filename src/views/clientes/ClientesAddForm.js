@@ -23,7 +23,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
-import LogoI from "assets/img/INTERRED.jpg";
+import LogoI from "assets/img/INTERRED.jpeg";
 /*import LogoC from "../Icons/LOGOI.jpeg";
 import marca from "../Icons/marcagua.png";
 import LogoD from "../Icons/LOGOD.jpeg";
@@ -79,8 +79,9 @@ class App extends React.Component {
      nombre: props.nombre,
      ubi: props.ubi,
      telefono: props.telefono,
-     velocidad: "10 MEGAS",
-     idVelocidad: 0,
+     velocidadL: "10 MEGAS",
+     velocidad: 0,
+     television:0,
      monto: 0,
      difDate: 0,
      bandSucces: false,

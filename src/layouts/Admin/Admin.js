@@ -28,7 +28,7 @@ import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
 
-import logo from "assets/img/INTERRED.jpg";
+import logo from "assets/img/INTERRED.jpeg";
 
 var ps;
 

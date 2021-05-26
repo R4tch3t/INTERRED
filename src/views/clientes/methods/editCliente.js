@@ -1,5 +1,5 @@
 import ip from "variables/ip"
-export default async (c,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago, bandTable) => {
+export default async (c,nombre,telefono,ubi,velocidad, television, monto, difDate, fechaSI, fechaSF, fechaPago, bandTable) => {
     try{
         const {idCliente, idRecibo} = c.state;
         if(!bandTable){
@@ -9,7 +9,7 @@ export default async (c,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI
         const {setMsg, setColor} = c.state
         const sendUri = `${ip("2000")}clientes/editCliente`;
         const bodyJSON = {
-          idCliente,idRecibo,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago
+          idCliente,idRecibo,nombre,telefono,ubi,velocidad,television, monto, difDate, fechaSI, fechaSF, fechaPago
         }
         const response = await fetch(sendUri, {
             method: "POST",

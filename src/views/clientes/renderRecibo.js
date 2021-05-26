@@ -22,7 +22,7 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
-import LogoI from "assets/img/INTERRED.jpg";
+import LogoI from "assets/img/INTERRED.jpeg";
 import pie from "assets/img/pie.jpg";
 /*import LogoC from "../Icons/LOGOI.jpeg";
 import marca from "../Icons/marcagua.png";
@@ -103,6 +103,7 @@ class App extends React.Component {
       expiro: props.expiro,
       idVelocidad: props.idVelocidad,
       velocidad: props.velocidad,
+      television: props.television,
       pagar: props.pagar,
       fechaSI: props.dateSI,
       fechaSF: props.dateSF,
@@ -144,11 +145,11 @@ class App extends React.Component {
     //const añoF = document.getElementById('añoF').value
     //const totalA = spellNumber(parseInt(añoF) - parseInt(añoI)).replace('PESOS', '').replace('PESO', '')
     const pagar = document.getElementById('pagar').value;
-    const fechaPago = new Date(new Date(Date.now()) - this.tzoffset).toISOString().slice(0, -1);
+    const fechaPago = new Date().toISOString().slice(0, -1);
     let dateSI = new Date(fechaSI);
     let dateSF = new Date(fechaSF);
-    dateSI = new Date(dateSI - this.tzoffset);
-    dateSF = new Date(dateSF - this.tzoffset);
+    dateSI = new Date(dateSI);
+    dateSF = new Date(dateSF);
     genRecibo(this,nombre,ubi,pagar,fechaPago,fechaSI,fechaSF)
   }
 
@@ -316,22 +317,24 @@ onChangeDF = date => {
   //this.obtenerOF(dateSI, dateNSF);
   this.setState({ dateSF: date })
 }
-setTotal=(t,idV,v)=>{
+setTotal=(t,idV,v,television)=>{
     let {difDate} = this.state
     difDate = difDate==="undefined"?1:difDate
     console.log(`difDate: ${difDate}`)
-    const monto = t * difDate
-    const velL = document.getElementById("velocidadL");
-    velL.value=v;
-    
+    //const monto = t * difDate
+    v=parseInt(v)
+    television=parseInt(television)
+    //const velL = document.getElementById("velocidad");
+    //velL.value=v;
+    const monto=v+television;
     console.log(monto)
     //c.setState({pagar})
     //console.log(difDate)
-    this.setState({idVelocidad: idV,velocidad: v,monto})
+    this.setState({velocidad: v,monto,television})
 } 
   render() {
     const {classes} = this.props
-    const {dia, idCliente, nombre, ubi, fechaPago, monto, mes, año,pagar, fechaSI, fechaSF, añoF, idVelocidad, velocidad,difDate, expiro,bandGen,idRecibo} = this.state
+    const {dia, idCliente, nombre, ubi, fechaPago, monto, mes, año,pagar, fechaSI, fechaSF, añoF, idVelocidad, velocidad,television,difDate, expiro,bandGen,idRecibo} = this.state
     const nDoc = `RECIBO_CLIENTE_${idCliente}`
     //const dateSI = "";
     //const dateSF = ""
@@ -384,85 +387,55 @@ setTotal=(t,idV,v)=>{
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={3}>
-                    <UncontrolledDropdown style={{position: 'relative', left: 0}}>
-                      <DropdownToggle
-                          caret
-                          className="btn-icon"
-                          color="link"
-                          data-toggle="dropdown"
-                          type="button"
-                          style={{width: 90}}
-                        >
-                        VELOCIDAD: 
-                        </DropdownToggle>
-                        <DropdownToggle
-                          caret
-                          className="btn-icon"
-                          color="link"
-                          data-toggle="dropdown"
-                          type="button"
-                        >
-                          <i className="tim-icons icon-settings-gear-63" />
-                        </DropdownToggle>
-                        <DropdownMenu aria-labelledby="dropdownMenuLink" left>
-                          <DropdownItem
-                           // href="#pablo"
-                           style={{cursor: 'pointer'}}
-                            onClick={e => {
-                              /*let difDate = 0
-                              let pagar = 0;
-                              const {fechaSI, fechaSF} = this.state
-                              const dateA = new Date(fechaSI);
-                              const dateB = new Date(fechaSF);
-                              //const {idVelocidad} = this.state;
-                              while(dateA<dateB){
-                                dateA.setMonth(dateA.getMonth()+1);
-                                difDate++;
-                              }*/
-                              this.setTotal(150,0,e.target.innerHTML)
-                            
-                            }}
-                          >
-                            10 MEGAS
-                          </DropdownItem>
-                          <DropdownItem
-                           // href="#pablo"
-                           style={{cursor: 'pointer'}}
-                            onClick={e => {
-                              this.setTotal(250,1,e.target.innerHTML)
-                            }}
-                          >
-                            20 MEGAS
-                          </DropdownItem>
-                          <DropdownItem
-                           // href="#pablo"
-                           style={{cursor: 'pointer'}}
-                            onClick={e => {
-                              this.setTotal(300,2,e.target.innerHTML)
-                            
-                            }}
-                          >
-                            30 MEGAS
-                          </DropdownItem>
-                        </DropdownMenu>
-                        <div style={{height: 7}} />
-                        
+                    
                         <CustomInput
                         labelText="VELOCIDAD:"
-                        id="velocidadL"
+                        id="velocidad"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                        //  type: "number",
-                          placeholder: 'VELOCIDAD',
-                          defaultValue: '\0'
+                          type: "number",
+                          //placeholder: 'VELOCIDAD',
+                          defaultValue: velocidad,
+                          onKeyUp: (e)=>{
+                            this.setTotal(0,0,e.target.value,television)
+                          },
+                          onMouseUp: (e)=>{
+                            this.setTotal(0,0,e.target.value,television)
+                          }
                         }}
                       />
-                      </UncontrolledDropdown>
                   
                     </GridItem>
-                  <GridItem xs={12} sm={12} md={3}>
+
+                    <GridItem xs={12} sm={12} md={3}>
+                    
+                        <CustomInput
+                        labelText="TELEVISIÓN:"
+                        id="television"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          type: "number",
+                          //placeholder: 'TELEVISION',
+                          defaultValue: television,
+                          onKeyUp: (e)=>{
+                            this.setTotal(0,0,velocidad,e.target.value)
+                          },
+                          onMouseUp: (e)=>{
+                            this.setTotal(0,0,velocidad,e.target.value)
+                          }
+                        }}
+                      />
+                  
+                    </GridItem>
+
+                  </GridContainer>
+
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={3}>
                       <CustomInput
                         labelText="A PAGAR:"
                         id="pagar"
@@ -479,9 +452,6 @@ setTotal=(t,idV,v)=>{
                         }}
                       />
                     </GridItem>
-
-                  </GridContainer>
-                  <GridContainer>
                     <GridItem xs={12} sm={12} md={6}>
                       <h4 className={classes.cardTitleBlack}>
                         PERIODO DE SUBSCRIPCIÓN:

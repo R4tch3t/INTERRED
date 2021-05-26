@@ -36,14 +36,16 @@ import {
   Container,
   Modal
 } from "reactstrap";
-
+import defaultIcon from  'assets/img/default-avatar.png'
 class AdminNavbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       collapseOpen: false,
       modalSearch: false,
-      color: "navbar-transparent"
+      color: "navbar-transparent",
+      iconLog: defaultIcon
+
     };
   }
   componentDidMount() {
@@ -189,7 +191,7 @@ class AdminNavbar extends React.Component {
                     onClick={e => e.preventDefault()}
                   >
                     <div className="photo">
-                      <img alt="..." src={require("assets/img/anime3.png")} />
+                      <img alt="..." src={defaultIcon} />
                     </div>
                     <b className="caret d-none d-lg-block d-xl-block" />
                     <p className="d-lg-none">Log out</p>

@@ -94,6 +94,7 @@ export default () => {
   const añoF = getParameterByName('añoF', urlDec)
   const pagar = getParameterByName('pagar', urlDec)
   const velocidad = getParameterByName('velocidad', urlDec)
+  const television = getParameterByName('television', urlDec)
   const idVelocidad = getParameterByName('idVelocidad', urlDec)
   const dateSI = getParameterByName('dateSI', urlDec)
   const dateSF = getParameterByName('dateSF', urlDec)
@@ -223,7 +224,8 @@ export default () => {
                   <div >
                     {bandCTA==='1' && 
                       <Pdf classes={classes} idCliente={idCliente}  nombre={nombre}
-                        ubi={ubi} fecha={fecha} monto={monto} idVelocidad={idVelocidad} dateSI={dateSI} dateSF={dateSF} velocidad={velocidad}
+                        ubi={ubi} fecha={fecha} monto={monto} idVelocidad={idVelocidad} dateSI={dateSI} 
+                        dateSF={dateSF} velocidad={velocidad} television={television}
                         pagar={pagar} difDate={difDate} expiro={expiro} idRecibo={idRecibo} setMsg={setMsg} setColor={setColor} />
                     }
                     {bandCTA!=='1' && 

@@ -4,14 +4,14 @@ import addClientes from "views/clientes/addClientes.js";
 import editCliente from "views/clientes/editClientes.js";
 
 var routes = [
-  {
+  /*{
     path: "/dashboard",
     name: "Estadisticas",
     rtlName: "لوحة القيادة",
     icon: "tim-icons icon-chart-pie-36",
     component: Dashboard,
     layout: "/admin"
-  },
+  },*/
   {
     path: "/listaClientes",
     name: "Lista de clientes",

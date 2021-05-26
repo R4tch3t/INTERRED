@@ -1,11 +1,11 @@
 import ip from "variables/ip"
 import decrypt from "views/Dashboard/decrypt.js";
 import encrypt from "views/Dashboard/encrypt.js";
-const genCTA = (idCliente, nombre, ubi, fecha, monto, velocidad, idVelocidad, dateSI, dateSF, difDate, expiro,idRecibo) => {
+const genCTA = (idCliente, nombre, ubi, fecha, monto, velocidad, television, idVelocidad, dateSI, dateSF, difDate, expiro,idRecibo) => {
     //const idRol = cookie.load('idRol')
     const idRol = "1";
     let url = idRol === '1' ? `/admin/listaClientes` : `/usuario/listaClientes`
-    let subUrl = `?bandCTA=1&idCliente=${idCliente}&nombre=${nombre}&ubi=${ubi}&fecha=${fecha}&dateSI=${dateSI}&dateSF=${dateSF}&monto=${monto}&idVelocidad=${idVelocidad}&velocidad=${velocidad}&difDate=${difDate}&expiro=${expiro}&pagar=0&idRecibo=${idRecibo}&isUpdated=1`
+    let subUrl = `?bandCTA=1&idCliente=${idCliente}&nombre=${nombre}&ubi=${ubi}&fecha=${fecha}&dateSI=${dateSI}&dateSF=${dateSF}&monto=${monto}&idVelocidad=${idVelocidad}&velocidad=${velocidad}&television=${television}&difDate=${difDate}&expiro=${expiro}&pagar=0&idRecibo=${idRecibo}&isUpdated=1`
     console.log(subUrl)
     url += `?v=${encrypt(subUrl)}`;
     //window.history.pushState(null,'Administrador','#/admin/creditos')
@@ -25,7 +25,7 @@ function getParameterByName(name, url) {
   }
 export default async (c, nombre, ubi, monto, fechaPago, fechaSI, fechaSF) => {
     try{
-    const {idCliente,difDate, velocidad, idVelocidad} = c.state
+    const {idCliente,difDate, velocidad, television, idVelocidad} = c.state
     const sendUri = `${ip("2000")}clientes/genRecibo`;
     /*const dateA = new Date(fechaSI)
     const dateB = new Date(fechaSF)
@@ -48,9 +48,11 @@ export default async (c, nombre, ubi, monto, fechaPago, fechaSI, fechaSF) => {
           dateI: fechaSI,
           dateF: fechaSF,
           difDate,
-          idVelocidad 
-
+          idVelocidad,
+          velocidad,
+          television 
     }
+
     const response = await fetch(sendUri, {
         method: "POST",
         headers: {
@@ -71,7 +73,7 @@ export default async (c, nombre, ubi, monto, fechaPago, fechaSI, fechaSF) => {
                 //const idVelocidad = getParameterByName('idVelocidad', urlDec)
                 //const difDate = getParameterByName('difDate', urlDec)
                 const idRecibo = r.clientes.insertId;
-                genCTA(idCliente, nombre, ubi, fechaPago, monto, velocidad, idVelocidad, fechaSI, fechaSF, difDate, 0,idRecibo)
+                genCTA(idCliente, nombre, ubi, fechaPago, monto, velocidad, television, idVelocidad, fechaSI, fechaSF, difDate, 0,idRecibo)
             }
     });
     }catch(e){
