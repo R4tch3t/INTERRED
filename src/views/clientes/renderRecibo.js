@@ -73,8 +73,8 @@ Font.register({
 class App extends React.Component {
   //state = { url: null , dia: null, mes: null, año: null, renderPDF: null};
   tzoffset = (new Date()).getTimezoneOffset() * 60000;
-  dateSI = new Date(Date.now() - this.tzoffset);
-  dateSF = new Date(Date.now() - this.tzoffset);
+  dateSI = new Date();
+  dateSF = new Date();
   idUsuario=0;
   constructor(props){
     super(props);
@@ -82,8 +82,8 @@ class App extends React.Component {
     //corte.data.labels = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"]
     //corte.data.series = [[]]
     this.tzoffset = (new Date()).getTimezoneOffset() * 60000;
-    this.dateSI = new Date(Date.now() - this.tzoffset);
-    this.dateSF = new Date(Date.now() - this.tzoffset);
+    this.dateSI = new Date();
+    this.dateSF = new Date();
     this.dateSI.setHours(0,0,0,0);
     this.dateSF.setHours(0,0,0,0);
     const d = new Date();

@@ -34,6 +34,7 @@ import WN from "@material-ui/icons/Warning"
 import { Line, Bar } from "react-chartjs-2";
 import Switch from '@material-ui/core/Switch';
 import {Zoom} from "views/zoom"
+
 // reactstrap components
 import {
   Button,
@@ -195,7 +196,7 @@ allClientes=async(cliente)=>{
                   telefono: e.telefono,
                   ubi: e.ubi,
                   fechaPago: null,
-                  fechaDePago:  e.ultimoRecibo?e.ultimoRecibo.fechaPago:e.ultimoRecibo,
+                  fechaDePago:  e.ultimoRecibo?(e.ultimoRecibo.fechaPago):e.ultimoRecibo,
                   monto: null,
                   montor: e.ultimoRecibo?e.ultimoRecibo.monto:e.ultimoRecibo,
                   idVelocidad: e.ultimoRecibo?e.ultimoRecibo.idVelocidad:e.ultimoRecibo,

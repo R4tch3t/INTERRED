@@ -99,13 +99,13 @@ class App extends React.Component {
     const nombre = document.getElementById("nombre").value;
     const ubi = document.getElementById("ubi").value;
     const telefono = document.getElementById("telefono").value;
-    const {idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago} = this.state;
+    const {velocidad, television, monto, difDate, fechaSI, fechaSF, fechaPago} = this.state;
     const {bandEdit,idCliente} = this.state
     if(nombre&&telefono&&ubi){
       if(!bandEdit){
-        addCliente(this,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago);
+        addCliente(this,nombre,telefono,ubi,velocidad,television, monto, difDate, fechaSI, fechaSF, fechaPago);
       }else{
-        editCliente(this,nombre,telefono,ubi,idVelocidad, monto, difDate, fechaSI, fechaSF, fechaPago);
+        editCliente(this,nombre,telefono,ubi,velocidad,television, monto, difDate, fechaSI, fechaSF, fechaPago);
       }
     }
   }
@@ -119,6 +119,7 @@ class App extends React.Component {
       this.handdleUp()
     }
   }
+
   allClientes=async(cliente)=>{
     try {
 
@@ -156,15 +157,19 @@ class App extends React.Component {
                telefono.value=e.telefono;
                ubi.value=e.ubi;
                const idVelocidad = e.ultimoRecibo?e.ultimoRecibo.idVelocidad:e.ultimoRecibo;//e.idVelocidad;
-               let velocidad = "10 MEGAS"
+               //let velocidad = "10 MEGAS"
                const monto=e.ultimoRecibo?e.ultimoRecibo.monto:e.ultimoRecibo;
+               const velocidad=e.ultimoRecibo?e.ultimoRecibo.velocidad:e.ultimoRecibo;
+               const television=e.ultimoRecibo?e.ultimoRecibo.television:e.ultimoRecibo;
                const difDate=e.ultimoRecibo?e.ultimoRecibo.difDate:e.ultimoRecibo;
-               const fechaPago=e.ultimoRecibo?e.ultimoRecibo.fechaPago:e.ultimoRecibo;
-               const fechaSI=e.ultimoRecibo?e.ultimoRecibo.dateI:e.ultimoRecibo;
-               const fechaSF=e.ultimoRecibo?e.ultimoRecibo.dateF:e.ultimoRecibo;
+               const fechaPago=e.ultimoRecibo?new Date(e.ultimoRecibo.fechaPago):e.ultimoRecibo;
+               const fechaSI=e.ultimoRecibo?new Date(e.ultimoRecibo.dateI):e.ultimoRecibo;
+               const fechaSF=e.ultimoRecibo?new Date(e.ultimoRecibo.dateF):e.ultimoRecibo;
                const idRecibo=e.ultimoRecibo?e.ultimoRecibo.idRecibo:e.ultimoRecibo;
                document.getElementById("pagar").value=monto;
-               switch(idVelocidad){
+               document.getElementById("velocidad").value=velocidad;
+               document.getElementById("television").value=television;
+               /*switch(idVelocidad){
                   case 1:
                     velocidad="20 MEGAS"
                     break;
@@ -172,8 +177,9 @@ class App extends React.Component {
                     velocidad="30 MEGAS"
                     break;
                   default:break;
-               }
-               this.setState({nombre: e.cliente,telefono: e.telefono, ubi: e.ubi, idVelocidad, velocidad, monto, difDate, fechaPago,fechaSI,fechaSF,idRecibo});
+               }*/
+               this.setState({nombre: e.cliente,telefono: e.telefono, ubi: e.ubi, idVelocidad, 
+                velocidad, television, monto, difDate, fechaPago,fechaSI,fechaSF,idRecibo});
                 /*data.push({
                   key: e.idCliente,
                   cliente: e.cliente,
@@ -215,28 +221,22 @@ class App extends React.Component {
 }
 
 setTotal=(t,v)=>{
-    let {difDate} = this.state
-    difDate = difDate==="undefined"?1:difDate
-    console.log(`difDate: ${difDate}`)
-    const monto = t * difDate
-    //const velL = document.getElementById("velocidadL");
-    //    velL.value=v
-    
-    console.log(monto)
-    //c.setState({pagar})
-    //console.log(difDate)
-    this.setState({velocidad: v,monto})
+    let velocidad = document.getElementById("velocidad").value
+    let television = document.getElementById("television").value
+    const monto = parseInt(velocidad)+parseInt(television)
+    document.getElementById("pagar").value=monto;
+    this.setState({velocidad,television,monto})
 }
 
 handleUpVel=(e)=>{
 console.log(e)
-if(e.which===13){
-  let v = document.getElementById("velocidadL").value
+//if(e.which===13){
+  /*let v = document.getElementById("velocidadL").value
   let t = v.split(" ").join('').toUpperCase();
   t=t.split("MEGAS").join("").split('MEGA').join('');
-  t=t.split("MG").join("");
-  this.setTotal(t,v);
-}
+  t=t.split("MG").join("");*/
+  this.setTotal();
+//}
 
 }
 
@@ -249,7 +249,7 @@ componentDidMount(){
 
   render() {
     const {classes} = this.props
-    const {nombre,telefono, ubi,bandSucces,bandEdit,velocidad,monto} = this.state
+    const {nombre,telefono, ubi,bandSucces,bandEdit,velocidad,television,monto} = this.state
     const labelB = bandEdit?"ACTUALIZAR CLIENTE":"REGISTRAR CLIENTE";
     return (
       <CardIcon>
@@ -312,83 +312,36 @@ componentDidMount(){
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={3}>
-                    {
-                    /*<UncontrolledDropdown style={{position: 'relative', left: 0}}>
-                      <DropdownToggle
-                          caret
-                          className="btn-icon"
-                          color="link"
-                          data-toggle="dropdown"
-                          type="button"
-                          style={{width: 90}}
-                        >
-                        VELOCIDAD: 
-                        </DropdownToggle>
-                        <DropdownToggle
-                          caret
-                          className="btn-icon"
-                          color="link"
-                          data-toggle="dropdown"
-                          type="button"
-                        >
-                          <i className="tim-icons icon-settings-gear-63" />
-                        </DropdownToggle>
-                        <DropdownMenu aria-labelledby="dropdownMenuLink" left>
-                          <DropdownItem
-                           // href="#pablo"
-                           style={{cursor: 'pointer'}}
-                            onClick={e => {
-                              
-                              this.setTotal(150,0,e.target.innerHTML)
-                            
-                            }}
-                          >
-                            10 MEGAS
-                          </DropdownItem>
-                          <DropdownItem
-                           // href="#pablo"
-                           style={{cursor: 'pointer'}}
-                            onClick={e => {
-                              this.setTotal(250,1,e.target.innerHTML)
-                            }}
-                          >
-                            20 MEGAS
-                          </DropdownItem>
-                          <DropdownItem
-                           // href="#pablo"
-                           style={{cursor: 'pointer'}}
-                            onClick={e => {
-                              this.setTotal(300,2,e.target.innerHTML)
-                            
-                            }}
-                          >
-                            30 MEGAS
-                          </DropdownItem>
-                        </DropdownMenu>
-                        <div style={{height: 7}} />
-                        
-                        <CustomInput
-                        labelText="VELOCIDAD:"
-                        id="velocidadL"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          type: "text"
-                        }}
-                      />
-                      </UncontrolledDropdown>
-                      */}
                       <CustomInput
                         labelText="VELOCIDAD:"
-                        id="velocidadL"
+                        id="velocidad"
                         formControlProps={{
                           fullWidth: true
                         }}
                         
                         inputProps={{
-                          type: "text",
-                          onKeyUp: this.handleUpVel
+                          type: "number",
+                          onKeyUp: this.handleUpVel,
+                          onMouseUp: this.handleUpVel,
+                          defaultValue: velocidad
+                        }}
+                      />
+                    </GridItem>
+                    </GridContainer>
+                    <GridContainer>
+                      <GridItem xs={12} sm={12} md={3}>
+                      <CustomInput
+                        labelText="TELEVISIÓN:"
+                        id="television"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        
+                        inputProps={{
+                          type: "number",
+                          onKeyUp: this.handleUpVel,
+                          onMouseUp: this.handleUpVel,
+                          defaultValue: television
                         }}
                       />
                     </GridItem>

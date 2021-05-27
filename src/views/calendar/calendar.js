@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { es } from 'date-fns/locale'
 import { DateRangePicker, START_DATE, END_DATE, DatePicker } from 'react-nice-dates'
 import 'react-nice-dates/build/style.css';
+import toSpanishDate from 'views/calendar/toSpanishDate'
 
 export default function DateRangePickerExample(props) {
   const {c,bandRange} = props
@@ -10,7 +11,7 @@ export default function DateRangePickerExample(props) {
   const [date, setDate] = useState();
   c.dateSI=startDate
   c.dateSF=endDate
-
+  
   //console.log(startDate)
   if(bandRange)
   return(
@@ -37,7 +38,7 @@ export default function DateRangePickerExample(props) {
         <input
           className={'input' + (focused ? ' -focused' : '')}
           {...inputProps}
-          value={c.state.fechaPago!=="undefined"?c.state.fechaPago:(date?date:"")}
+          value={c.state.fechaPago!=="undefined"?(toSpanishDate(c.state.fechaPago+"")):(date?toSpanishDate(date+""):"")}
           onMouseUp={()=>{
             const fechaPagoH = document.getElementById("fechaPagoH");
             const calendar = fechaPagoH.nextElementSibling.firstChild.nextElementSibling;
@@ -96,17 +97,16 @@ export default function DateRangePickerExample(props) {
         //pagar = velocidad * difDate;
         //const monto = pagar
         if(c.bandWrappCalendar){
-          
-//          document.getElementById(`row.velocidad[${idCliente}]`).innerHTML=vel;
+          //          document.getElementById(`row.velocidad[${idCliente}]`).innerHTML=vel;
           document.getElementById(`row.monto[${idCliente}]`).innerHTML=monto;
           c.state.velocidad=vel;
-//          const { fechaSF, idVelocidad, bandLock} = v
-          const fechaSI = startDate.toISOString();
-          const fechaSF = date.toISOString();
+          //          const { fechaSF, idVelocidad, bandLock} = v
+          const fechaSI = startDate;
+          const fechaSF = date;
           const v = {fechaSI, fechaSF, monto, difDate, velocidad, television, bandLock:false}
           c._setState(v);
         }else{
-          c.setState({monto,difDate,fechaSI: startDate.toISOString(), fechaSF: date.toISOString()});
+          c.setState({monto,difDate,fechaSI: startDate, fechaSF: date});
         }
       //  console.log(c.state.fechaSI)
        // console.log(c.state.fechaSF)
@@ -125,7 +125,7 @@ export default function DateRangePickerExample(props) {
             {...startDateInputProps}
             placeholder='Fecha inicial'
             style={stylesCell.inputBoxTop}
-            value={c.state.fechaSI!=="undefined"?c.state.fechaSI:(startDate?startDate:"")}
+            value={c.state.fechaSI!=="undefined"?toSpanishDate(c.state.fechaSI):(startDate?toSpanishDate(startDate):"")}
             disabled={c.state.bandLock}
           />}
            {">"}
@@ -134,7 +134,7 @@ export default function DateRangePickerExample(props) {
             {...endDateInputProps}
             placeholder='Fecha final'
             style={stylesCell.inputBox}
-            value={c.state.fechaSF!=="undefined"?c.state.fechaSF:(endDate?endDate:"")}
+            value={c.state.fechaSF!=="undefined"?toSpanishDate(c.state.fechaSF):(endDate?toSpanishDate(endDate):"")}
             disabled={c.state.bandLock}
           />
         </div>

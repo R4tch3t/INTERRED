@@ -20,6 +20,7 @@ import encrypt from "views/Dashboard/encrypt";
 import GridContainer from "components/Grid/GridContainer";
 import {Calendar} from "views/calendar"
 import {editCliente} from "views/clientes/methods"
+import toSpanishDate from 'views/calendar/toSpanishDate'
 import {
   DropdownToggle,
   DropdownMenu,
@@ -211,8 +212,8 @@ const genCarta = (CTA, nombre, ubi, tp) => {
 
 class wrappCalendar {
   tzoffset = (new Date()).getTimezoneOffset() * 60000;
-  dateSI = new Date(Date.now() - this.tzoffset);
-  dateSF = new Date(Date.now() - this.tzoffset);
+  dateSI = new Date();
+  dateSF = new Date();
   idUsuario=0;
   bandWrappCalendar = true;
   constructor(props){
@@ -221,8 +222,8 @@ class wrappCalendar {
     //corte.data.labels = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"]
     //corte.data.series = [[]]
     this.tzoffset = (new Date()).getTimezoneOffset() * 60000;
-    this.dateSI = new Date(Date.now() - this.tzoffset);
-    this.dateSF = new Date(Date.now() - this.tzoffset);
+    this.dateSI = new Date();
+    this.dateSF = new Date();
     this.dateSI.setHours(0,0,0,0);
     this.dateSF.setHours(0,0,0,0);
     const d = new Date();
@@ -232,9 +233,9 @@ class wrappCalendar {
       nombre: props.nombre,
       telefono: props.telefono,
       ubi: props.ubi, 
-      fechaSI: props.dateSI,
-      fechaSF: props.dateSF,
-      fechaPago: props.fechaPago,
+      fechaSI: new Date(props.dateSI),
+      fechaSF: new Date(props.dateSF),
+      fechaPago: new Date(props.fechaPago),
       monto: props.monto, 
       difDate: props.difDate,
       idVelocidad: props.idVelocidad,
@@ -323,6 +324,8 @@ export default function CustomTable(props) {
     wrapC.state.television=row.television;
     wrapC.state.monto=row.velocidad+row.television;
   }
+
+  
 
   try{
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -518,7 +521,7 @@ export default function CustomTable(props) {
                   //onMouseUp={(e)=>{genCTA(row.key,row.cliente,row.ubi,row.fechaDePago,row.montor,row.velocidad,row.idVelocidad,row.dateSI,row.dateSF,row.difDate,row.expiro,row.idRecibo)}}
                   >
                   <><h4 className={classes.cardTitleBlack} style={{color: 'red'}}>
-                       {row.dateSF}
+                       {new Date(row.dateSF).toLocaleString()}
                     </h4>
                       <Calendar c={wrapC} /*c={()=>{
                                    wrapC = new wrappCalendar({idCliente: row.key,idRecibo: row.idRecibo, nombre: row.cliente, telefono: row.telefono, ubi: row.ubi,  
@@ -538,7 +541,7 @@ export default function CustomTable(props) {
                     //row.fechaPago?row.fechaPago:(row.fechaDePago?row.fechaDePago:(<i>Sin recibo</i>))
                   }
                   <h4 id="fechaPagoH" className={classes.cardTitleBlack} style={{color: (row.fechaDePago?'green':'red') }}>
-                        {row.fechaPago?row.fechaPago:(row.fechaDePago?row.fechaDePago:(<i>Sin recibo</i>))}
+                        {row.fechaPago?new Date(row.fechaPago).toLocaleString():(row.fechaDePago?new Date(row.fechaDePago).toLocaleString():(<i>Sin recibo</i>))}
                   </h4>
                       
                        <Calendar c={wrapC} bandRange={true} />
