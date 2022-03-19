@@ -187,7 +187,7 @@ class App extends React.Component {
   styles = StyleSheet.create({
     logoI: {
       position: "absolute",
-      width: 125,
+      width: 150,
       height: 125,
       left: 20,
       top: 20
@@ -511,21 +511,21 @@ setTotal=(t,idV,v,television)=>{
                     <Page size="letter" wrap>
                       <Image src={LogoI} style={this.styles.logoI} />
                       <View style={this.styles.headV} >
-                        <Text style={[this.styles.headO,{position: "relative", top: 10, fontSize: 10}]} >
+                        {/*<Text style={[this.styles.headO,{position: "relative", top: 10, fontSize: 10}]} >
                           INTERRED
                         </Text>
                         <Text style={[this.styles.headO,{position: "relative", top: 10, fontSize: 10}]} >
                           INTERNET POR CABLE E INALÁMBRICO
+                        </Text>*/}
+                        <Text style={[this.styles.headO,{position:"absolute", top: 20, left: 270, fontSize: 9}]} >
+                          WhatsApp: 7566882095 
                         </Text>
-                        <Text style={[{position: "absolute", top: 10, left: 220, fontSize: 7}]} >
-                          CORREO ELECTRÓNICO: CASMORNEZA@GMAIL.COM 
-                        </Text>
-                        <Text style={[{position: "absolute", top: 20, left: 220, fontSize: 7}]} >
+                        {/*<Text style={[{position: "absolute", top: 20, left: 220, fontSize: 7}]} >
                           DIRECCIÓN: CALLE DEL CAMPESINO S/N.
                         </Text>
                         <Text style={[{position: "absolute", top: 30, left: 220, fontSize: 7}]} >
                           COLONIA EMILIANO ZAPATA.
-                        </Text>
+                        </Text>*/}
                         
                       </View>
                      <View style={this.styles.headT} >
@@ -602,7 +602,7 @@ setTotal=(t,idV,v,television)=>{
                       </View>
                       <View style={[this.styles.headV, {top: 150, left: 20}]} >
                         <Text style={[this.styles.headO,{position: "relative", fontSize: 10, width: '90%'}]} >
-                          Le recordamos realizar su pago, antes de su fecha límite, sí tu mensualidad se venció y no cuentas con el servicio, al realizar tu pago tendrá que esperar un aproximado de 24 horas para que su señal vuelva a reactivarse INTERRED AGRADECE TU PREFERENCIA Navega más rápido...............................................................................
+                          Le recordamos realizar su pago, antes de su fecha límite, sí tu mensualidad se venció y no cuentas con el servicio, al realizar tu pago tendrá que esperar un aproximado de 24 horas para que su señal vuelva a reactivarse INTERRED AGRADECE TU PREFERENCIA...............................................................................
                         </Text>
                         
                       </View>
